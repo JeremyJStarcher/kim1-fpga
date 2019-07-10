@@ -1,0 +1,9 @@
+db/
+incremental_db/
+*.bak
+*.rpt
+*.summary
+kim.done
+kim.pin
+kim.sof
+kim.pof
