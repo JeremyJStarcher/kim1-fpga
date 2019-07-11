@@ -34,7 +34,7 @@ signal driver_start : std_logic := '0';
 
 function hex2seg(num : std_logic_vector(3 downto 0)) return std_logic_vector is
 begin
-  case num is 
+  case num is
     when "0000" => return("01111110"); -- 0
     when "0001" => return("00110000"); -- 1
     when "0010" => return("01101101"); -- 2
@@ -51,12 +51,12 @@ begin
     when "1101" => return("00111101"); -- d
     when "1110" => return("01001111"); -- E
     when "1111" => return("01000111"); -- F
-    when others => return("00000000"); 
+    when others => return("00000000");
   end case;
 end hex2seg;
 
 begin
-  process 
+  process
     variable counter : integer := 0;
     variable clk_counter : integer := 0;
     variable latch_in : std_logic_vector(31 downto 0) := x"00000000";
@@ -68,7 +68,7 @@ begin
     variable dig5_data : std_logic_vector(7 downto 0) := x"00";
     variable dig6_data : std_logic_vector(7 downto 0) := x"00";
     variable dig7_data : std_logic_vector(7 downto 0) := x"00";
-    
+
   begin
       wait until rising_edge(clk);
         case state is
@@ -93,8 +93,6 @@ begin
             when init_4 =>
                   if (driver_state = idle) then
                     command <= x"0B07"; -- scan limit
-						  
-						  -- command <= x"0F00"; -- scan limit
                     driver_state <= start;
                     state <= read_data;
                   end if;
@@ -111,49 +109,49 @@ begin
                     state <= dig_7;
             when dig_7 =>
                   if (driver_state = idle) then
-                    command <= x"08" & dig7_data; 
+                    command <= x"08" & dig7_data;
                     driver_state <= start;
                     state <= dig_6;
                   end if;
             when dig_6 =>
                   if (driver_state = idle) then
-                    command <= x"07" & dig6_data; 
+                    command <= x"07" & dig6_data;
                     driver_state <= start;
                     state <= dig_5;
                   end if;
             when dig_5 =>
                   if (driver_state = idle) then
-                    command <= x"06" & dig5_data; 
+                    command <= x"06" & dig5_data;
                     driver_state <= start;
                     state <= dig_4;
                   end if;
             when dig_4 =>
                   if (driver_state = idle) then
-                    command <= x"05" & dig4_data; 
+                    command <= x"05" & dig4_data;
                     driver_state <= start;
                     state <= dig_3;
                   end if;
             when dig_3 =>
                   if (driver_state = idle) then
-                    command <= x"04" & dig3_data; 
+                    command <= x"04" & dig3_data;
                     driver_state <= start;
                     state <= dig_2;
                   end if;
             when dig_2 =>
                   if (driver_state = idle) then
-                    command <= x"03" & dig2_data; 
+                    command <= x"03" & dig2_data;
                     driver_state <= start;
                     state <= dig_1;
                   end if;
             when dig_1 =>
                   if (driver_state = idle) then
-                    command <= x"02" & dig1_data; 
+                    command <= x"02" & dig1_data;
                     driver_state <= start;
                     state <= dig_0;
                   end if;
             when dig_0 =>
                   if (driver_state = idle) then
-                    command <= x"01" & dig0_data; 
+                    command <= x"01" & dig0_data;
                     driver_state <= start;
                     state <= read_data;
                   end if;
@@ -187,7 +185,7 @@ begin
              else
                  driver_state <= clk_data;
              end if;
-          when finished => 
+          when finished =>
                 driver_state <= idle;
            when others => null;
          end case;
