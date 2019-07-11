@@ -1,7 +1,7 @@
 <sld_project_info>
   <file_info>
-    <file checksum="0x0009E6BF" device="EP2C5T144C8" path="kim.sof" usercode="0xFFFFFFFF"/>
-    <file checksum="0x074D36D3" device="EPCS4" path="kim.pof" usercode="0x00000000"/>
+    <file checksum="0x000BAB57" device="EP2C5T144C8" path="kim.sof" usercode="0xFFFFFFFF"/>
+    <file checksum="0x074A249C" device="EPCS4" path="kim.pof" usercode="0x00000000"/>
   </file_info>
   <hub_info ir_width="0" node_count="0"/>
   <node_info/>

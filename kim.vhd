@@ -26,7 +26,7 @@ architecture rtl of Kim is
 	signal spi_clock : std_logic;
 	signal tick_clock : std_logic;
 
-	
+
 	signal	AB		: std_logic_vector(15 downto 0);	-- address bus
 	signal	DI		: std_logic_vector(7 downto 0);		-- data in, read bus
 	signal 	DO		: std_logic_vector(7 downto 0);		-- data out, write bus
@@ -35,7 +35,7 @@ architecture rtl of Kim is
 	signal	NMI	: std_logic;								-- non-maskable interrupt request
 	signal	RDY	: std_logic;								-- Ready signal. Pauses CPU when RDY=0
 
-	
+
 component Bit4 is
 	port(C, CLR : in std_logic;
 	Q : out std_logic_vector(3 downto 0));
@@ -83,6 +83,10 @@ begin
 		data_out => max_din
 	);
 
+	DI <= x"EA"; -- hard wire in a NOP
+	NMI <= '1';
+	RDY <= '1';
+
 	cpu1: cpu port map(
 		clk => tick_clock,
 		reset => reset,
@@ -106,9 +110,13 @@ begin
 		elsif rising_edge(tick_clock) then
 			max_d <= max_d + 1;
 		end if;
-		
-		tt(31 downto 28)<= "1010";
-		tt <= (others => '0');
+
+		tt(31 downto 28)<= AB(15 downto 12); -- "1010";
+		tt(27 downto 24)<= AB(11 downto 8); -- )"1011";
+		tt(23 downto 20)<= AB(7 downto 4); --)"1100";
+		tt(19 downto 16)<= AB(3 downto 0); -- ))"1101";
+
+		-- tt <= (others => '0');
 		-- tt(27 downto 0)<= max_d;
 	end process;
 
