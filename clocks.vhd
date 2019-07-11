@@ -14,7 +14,7 @@ architecture cclk of Clock is
 	constant SPI_FREQ : integer := 500000;
 	constant SPI_CNT_MAX : integer := CLK_FREQ/SPI_FREQ/2-1;
 
-	constant TICK_FREQ : integer := 100;
+	constant TICK_FREQ : integer := 1;
 	constant TICK_CNT_MAX: integer := CLK_FREQ/TICK_FREQ/2-1;
 
 	signal c_spi : std_logic := '0';

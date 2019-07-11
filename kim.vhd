@@ -30,7 +30,7 @@ architecture rtl of Kim is
 	signal	AB		: std_logic_vector(15 downto 0);	-- address bus
 	signal	DI		: std_logic_vector(7 downto 0);		-- data in, read bus
 	signal 	DO		: std_logic_vector(7 downto 0);		-- data out, write bus
-	signal	WD		: std_logic;								-- write enable
+	signal	WE		: std_logic;								-- write enable
 	signal	IRQ	: std_logic;								-- interrupt request
 	signal	NMI	: std_logic;								-- non-maskable interrupt request
 	signal	RDY	: std_logic;								-- Ready signal. Pauses CPU when RDY=0
@@ -57,7 +57,6 @@ component Clock is
 	tick_clock : out std_logic);
 end component;
 
-
 component cpu is
 	port(
 		clk	: in std_logic;								-- CPU clock
@@ -65,7 +64,7 @@ component cpu is
 		AB		: out std_logic_vector(15 downto 0);	-- address bus
 		DI		: in std_logic_vector(7 downto 0);		-- data in, read bus
 		DO		: out std_logic_vector(7 downto 0);		-- data out, write bus
-		WD		: in std_logic;								-- write enable
+		WE		: out std_logic;								-- write enable
 		IRQ	: in std_logic;								-- interrupt request
 		NMI	: in std_logic;								-- non-maskable interrupt request
 		RDY	: in std_logic);								-- Ready signal. Pauses CPU when RDY=0
@@ -84,6 +83,17 @@ begin
 		data_out => max_din
 	);
 
+	cpu1: cpu port map(
+		clk => tick_clock,
+		reset => reset,
+		AB	=> AB,
+		DI	=> DI,
+		DO	=> DO,
+		WE => WE,
+		IRQ => IRQ,
+		NMI => NMI,
+		RDY => RDY
+);
 
 	led2 <= not Q1(0);
 	led1 <= not Q1(1);
