@@ -19,12 +19,23 @@ port (
 end Kim;
 
 architecture rtl of Kim is
-	signal max_d 	: std_logic_vector(31 downto 0) := "00011111111111111111111111111110";
+	signal max_d 	: std_logic_vector(27 downto 0) := "0001111111111111111111111110";
+	signal tt 		: std_logic_vector(31 downto 0) := "00011111111111111111111111111110";
 	signal Q1		: std_logic_vector(3 downto 0);
 	signal reset	: std_logic;
 	signal spi_clock : std_logic;
 	signal tick_clock : std_logic;
 
+	
+	signal	AB		: std_logic_vector(15 downto 0);	-- address bus
+	signal	DI		: std_logic_vector(7 downto 0);		-- data in, read bus
+	signal 	DO		: std_logic_vector(7 downto 0);		-- data out, write bus
+	signal	WD		: std_logic;								-- write enable
+	signal	IRQ	: std_logic;								-- interrupt request
+	signal	NMI	: std_logic;								-- non-maskable interrupt request
+	signal	RDY	: std_logic;								-- Ready signal. Pauses CPU when RDY=0
+
+	
 component Bit4 is
 	port(C, CLR : in std_logic;
 	Q : out std_logic_vector(3 downto 0));
@@ -62,13 +73,12 @@ component cpu is
 end component;
 
 
-
 begin
 	c1: Clock port map (C => clk, CLR => reset, spi_clock => spi_clock, tick_clock => tick_clock);
 	div1: Bit4 port map (C => tick_clock, CLR => reset, Q => Q1);
 
 	max1: M7219 port map (clk => spi_clock,
-		parallel => max_d,
+		parallel => tt,
 		clk_out => max_clk,
 		load => max_cs,
 		data_out => max_din
@@ -86,7 +96,10 @@ begin
 		elsif rising_edge(tick_clock) then
 			max_d <= max_d + 1;
 		end if;
-
+		
+		tt(31 downto 28)<= "1010";
+		tt <= (others => '0');
+		-- tt(27 downto 0)<= max_d;
 	end process;
 
 	process(clk, sw0)
