@@ -86,7 +86,7 @@ begin
                   end if;
             when init_3 =>
                   if (driver_state = idle) then
-                    command <= x"0A00"; -- intensity
+                    command <= x"0A0A"; -- intensity
                     driver_state <= start;
                     state <= init_4;
                   end if;

@@ -23,12 +23,12 @@ process(clock) is
 begin
 	if(rising_edge(clock) and rom_enable = '1') then
 		case address is
-			when x"FFFA" => data_output <= x"BB"; -- x"1C"; -- NMI
-			when x"FFFB" => data_output <= x"BB"; -- x"1C"; -- NMI
-			when x"FFFC" => data_output <= x"CC"; -- x"22"; -- RESET
-			when x"FFFD" => data_output <= x"CC"; -- x"1C"; -- RESET
-			when x"FFFE" => data_output <= x"DD"; -- x"1F"; -- IRQ/BRK
-			when x"FFFF" => data_output <= x"DD"; -- x"1C"; -- IRQ/BRK
+			when x"FFFA" => data_output <= x"1C"; -- NMI
+			when x"FFFB" => data_output <= x"1C"; -- NMI
+			when x"FFFC" => data_output <= x"22"; -- RESET
+			when x"FFFD" => data_output <= x"1C"; -- RESET
+			when x"FFFE" => data_output <= x"1F"; -- IRQ/BRK
+			when x"FFFF" => data_output <= x"1C"; -- IRQ/BRK
 			when others => z <= '1';
 		end case;
 	end if;
