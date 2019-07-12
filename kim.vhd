@@ -19,16 +19,24 @@ port (
 end Kim;
 
 architecture rtl of Kim is
-	signal max_d 	: std_logic_vector(27 downto 0) := "0001111111111111111111111110";
-	signal tt 		: std_logic_vector(31 downto 0) := "00011111111111111111111111111110";
+	signal max_d 	: std_logic_vector(27 downto 0) := "0000000000000000000000000000";
+	signal tt 		: std_logic_vector(31 downto 0) := "00000000000000000000000000000000";
 	signal Q1		: std_logic_vector(3 downto 0);
 	signal reset	: std_logic;
+
 	signal spi_clock : std_logic;
 	signal tick_clock : std_logic;
 
+	signal TOP_ROM_DO	: std_logic_vector(7 downto 0);
+	signal TOP_ROM_EN : std_logic;
+
+	shared variable	HAB1		: std_logic_vector(15 downto 0);	-- address bus
+	shared variable	HAB2		: std_logic_vector(15 downto 0);	-- address bus
 
 	signal	AB		: std_logic_vector(15 downto 0);	-- address bus
 	signal	DI		: std_logic_vector(7 downto 0);		-- data in, read bus
+	shared variable	HDI	: std_logic_vector(7 downto 0);		-- data in, read bus
+
 	signal 	DO		: std_logic_vector(7 downto 0);		-- data out, write bus
 	signal	WE		: std_logic;								-- write enable
 	signal	IRQ	: std_logic;								-- interrupt request
@@ -68,22 +76,25 @@ component cpu is
 		IRQ	: in std_logic;								-- interrupt request
 		NMI	: in std_logic;								-- non-maskable interrupt request
 		RDY	: in std_logic);								-- Ready signal. Pauses CPU when RDY=0
-
 end component;
 
+component top_rom is
+generic(
+	address_length: natural := 16;
+	data_length: natural := 8
+);
+port(
+	clock: in std_logic;
+	rom_enable: in std_logic;
+	address: in std_logic_vector((address_length - 1) downto 0);
+	data_output: out std_logic_vector ((data_length - 1) downto 0)
+);
+end component;
 
 begin
 	c1: Clock port map (C => clk, CLR => reset, spi_clock => spi_clock, tick_clock => tick_clock);
 	div1: Bit4 port map (C => tick_clock, CLR => reset, Q => Q1);
 
-	max1: M7219 port map (clk => spi_clock,
-		parallel => tt,
-		clk_out => max_clk,
-		load => max_cs,
-		data_out => max_din
-	);
-
-	DI <= x"EA"; -- hard wire in a NOP
 	NMI <= '1';
 	RDY <= '1';
 
@@ -98,6 +109,27 @@ begin
 		NMI => NMI,
 		RDY => RDY
 );
+	
+	max1: M7219 port map (clk => spi_clock,
+		parallel => tt,
+		clk_out => max_clk,
+		load => max_cs,
+		data_out => max_din
+	);
+
+		tt(31 downto 28)<= HAB2(15 downto 12); -- "1010";
+		tt(27 downto 24)<= HAB2(11 downto 8); -- )"1011";
+		tt(23 downto 20)<= HAB2(7 downto 4); --)"1100";
+		tt(19 downto 16)<= HAB2(3 downto 0); -- ))"1101";
+
+	rom1: top_rom port map (
+		clock => tick_clock,
+		rom_enable => TOP_ROM_EN,
+		address => HAB2,
+		data_output => TOP_ROM_DO
+	);
+
+	DI <= HDI;
 
 	led2 <= not Q1(0);
 	led1 <= not Q1(1);
@@ -105,19 +137,31 @@ begin
 
 	process(tick_clock)
 	begin
-		if (reset = '1') then
-			max_d <= (others => '0');
-		elsif rising_edge(tick_clock) then
-			max_d <= max_d + 1;
+		if tick_clock'event and tick_clock='1' then
+			HAB2 := HAB1;
+			HAB1 := AB;
+		
+			case HAB1 is
+			when x"FFFA"
+				| x"FFFB"
+				| x"FFFC"
+				| x"FFFD"
+				| x"FFFE"
+				| x"FFFF"	=>
+				TOP_ROM_EN <= '1';
+				HDI := TOP_ROM_DO;
+			when others =>
+				HDI := x"EA"; -- hard wire in a NOP
+				-- TOP_ROM_EN <= '0';
+			end case;
 		end if;
+				
+		tt(15 downto 12)<=  HDI(7 downto 4);
+		tt(11 downto 8)<=  HDI(3 downto 0);
 
-		tt(31 downto 28)<= AB(15 downto 12); -- "1010";
-		tt(27 downto 24)<= AB(11 downto 8); -- )"1011";
-		tt(23 downto 20)<= AB(7 downto 4); --)"1100";
-		tt(19 downto 16)<= AB(3 downto 0); -- ))"1101";
+		tt(7 downto 4)<= TOP_ROM_DO(7 downto 4); -- ))"1101";
+		tt(3 downto 0)<= TOP_ROM_DO(3 downto 0); -- ))"1101";
 
-		-- tt <= (others => '0');
-		-- tt(27 downto 0)<= max_d;
 	end process;
 
 	process(clk, sw0)
