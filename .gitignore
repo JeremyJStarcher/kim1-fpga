@@ -3,7 +3,12 @@ incremental_db/
 *.bak
 *.rpt
 *.summary
-kim.done
-kim.pin
-kim.sof
-kim.pof
+
+hdl/kim-1-ep2cs/kim.done
+hdl/kim-1-ep2cs/kim.pin
+hdl/kim-1-ep2cs/kim.sof
+hdl/kim-1-ep2cs/kim.pof
+
+
+board/kim1-earthpeople/kim1-earthpeople-backups
+board/kim1-earthpeople/_autosave-kim1-earthpeople.kicad_pcb
