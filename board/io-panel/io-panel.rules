@@ -1,0 +1,99 @@
+
+(rules PCB io-panel
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 4346)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 6.0)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.6)
+    )
+  )
+  (rule
+    (width 350.0)
+    (clear 200.2)
+    (clear 125.0 (type smd_to_turn_gap))
+    (clear 50.0 (type smd_smd))
+  )
+  (padstack "Via[0-1]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_800:400_um" "Via[0-1]_800:400_um" default
+  )
+  (via 
+    "Via[0-1]_800:400_um-kicad_default" "Via[0-1]_800:400_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_800:400_um-VCC" "Via[0-1]_800:400_um" VCC
+  )
+  (via_rule
+    default "Via[0-1]_800:400_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_800:400_um-kicad_default"
+  )
+  (via_rule
+    VCC "Via[0-1]_800:400_um-VCC"
+  )
+  (class default
+    "/S_E" "/S_D" "/S_C" "/S_B" "ENABLE_TTY" "/S_A" "/S_F" "/S_G"
+    SPARE1 SPARE2 "LED_SEG_2" "LED_SEG_0" "LED_SEG_5" "LED_SEG_4" "LED_SEG_6" "KB_ROW_0"
+    "LED_SEG_1" "KB_ROW_2" "KB_ROW_1" "KB_COL_0" "KB_COL_1" "KB_COL_2" "KB_COL_3" "KB_COL_4"
+    "KB_COL_5" "KB_COL_6" "ST_KEY" "RS_KEY" "LED_DIG_4" "LEG_DIG_5" "LED_DIG_6" "LED_DIG_7"
+    "LED_DIG_8" "LED_DIG_9" "Net-(AFF1-Pad3)" "Net-(AFF2-Pad3)" "Net-(AFF3-Pad3)" "Net-(AFF4-Pad3)" "Net-(AFF5-Pad3)" VCC
+    "Net-(Q1-Pad2)" "Net-(Q2-Pad2)" "Net-(Q3-Pad2)" "Net-(Q4-Pad2)" "Net-(Q5-Pad2)" "Net-(Q6-Pad2)" "Net-(AFF6-Pad3)" SPARE3
+    SPARE5 SPARE6 SPARE7 "LED_SEG_3" "SST_KEY" "EXP_RAM" GND "unconnected-(SW201-Pad1)"
+    "unconnected-(SW201-Pad4)"
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 350.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 350.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class VCC
+    (clearance_class VCC)
+    (via_rule VCC)
+    (rule
+      (width 500.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)

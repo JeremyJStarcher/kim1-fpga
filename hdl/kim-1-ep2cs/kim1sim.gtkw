@@ -1,0 +1,24 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Tue May 15 18:14:24 2018
+[*]
+[dumpfile] "/mnt/sedwards/svn/presentations/2018-vcf-fpga/kim1/kim1sim.vcd"
+[dumpfile_mtime] "Tue May 15 18:12:11 2018"
+[dumpfile_size] 29170
+[savefile] "/mnt/sedwards/svn/presentations/2018-vcf-fpga/kim1/kim1sim.gtkw"
+[timestart] 4
+[size] 1423 632
+[pos] -1157 -1143
+*-1.923578 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[sst_width] 225
+[signals_width] 94
+[sst_expanded] 1
+[sst_vpaned_height] 345
+@28
+TOP.v.clk
+TOP.v.reset
+@23
+TOP.v.AB[15:0]
+[pattern_trace] 1
+[pattern_trace] 0

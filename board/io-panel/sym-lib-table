@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "ep2c5")(type "KiCad")(uri "${KIPRJMOD}/ep2c5.kicad_sym")(options "")(descr ""))
+  (lib (name "kim-1")(type "KiCad")(uri "/mnt/common/Retro/kim-1_pal-1/FPGA/board/kim-1-library/kim-1.kicad_sym")(options "")(descr ""))
+)

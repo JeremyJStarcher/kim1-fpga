@@ -1,0 +1,181 @@
+The KIM-1 is a 6502-based trainer board consisting of
+
+A 6502 running at 1 MHz
+
+Two 6530 "RIOT" chips with
+    64 bytes RAM
+    1K ROM
+    two 8-bit bidirectional parallel I/O ports
+    a software programmable timer
+
+1K of static RAM (8 6102s)
+
+RS: Reset key
+
+ST: Step key (NMI#)
+
+SST: Single-Step (switch)
+
+6 7-segment LEDs (multiplexed)
+
+21-key matrix keypad (electrically, 3 rows, 7 columns)
+
+Simple TTY interface (4 pins on a 6530)
+
+Cassette interface (two pins on a 6530)
+------------------------------
+Memory map:
+
+0000 - 03FF RAM (1K)
+1700 - 173F 6530-003 registers  (application connector)
+1740 - 177F 6530-002 registers  (keyboard, LEDs, TTY, cassette)
+1780 - 17FF RAM (128 bytes, 6530s)
+1800 - 1FFF ROM (2K)   1800-1BFF 6530-003  1C00-1FFF 6530-002
+
+Three highest address bits aren't decoded; pattern repeats 8 times
+
+15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+x  x  x   0  0  0  x  x  x  x  x  x  x  x  x  x  RAM (1K: 0000-03ff)
+x  x  x   1  1  1  1  1  1  x  x  x  x  x  x  x  RAM (128b: 1780 - 17FF)
+x  x  x   1  1  x  x  x  x  x  x  x  x  x  x  x  ROM (2K: 1800 - 1FFF)
+
+------------------------------
+
+6530-002
+
+PA0-PA6 keyboard columns in; LED segments out
+PA7 TTY Data in
+
+PB0 TTY Data out
+PB1-PB4 0000 Keyboard row 0
+        0010 Keyboard row 1
+        0011 Keyboard row 2
+        0100 Keyboard row 3 (expansion only)
+        0101 LED leftmost digit
+        0110 LED
+        0111 LED
+        1000 LED
+        1001 LED
+        1010 LED rightmost digit
+
+        remaining codes are undefined
+PB5 TTY/Audio control
+PB6     Not connected?  
+PB7 Cassette data
+
+6530-003
+PA0-PA7 To application connector
+PB0-PB7 To application connector
+------------------------------
+FPGA pins:
+
+Reset (RS)
+NMI   (ST)
+SST
+
+Keypad: 3 rows; 7 columns
+LED: 7 segments; 6 digits
+
+There are four 28-pin headers all around the FPGA.  If I don't multiplex
+things, it will take two 28-pin cables to connect the keypad/display.
+
+But the point is to minimize the amount of extra circuitry: let the FPGA do it.
+
+------------------------------
+od -t x1 -A x -v 6530-003.bin
+
+6530-003.bin  1800-1BFF
+6530-002.bin  1C00-1FFF
+
+------------------------------
+Verilog 6502 cores:
+
+Thomas Skibo
+http://www.thomasskibo.com/projects/pet2001fpga/
+
+Arlet Ottens
+http://ladybug.xs4all.nl/arlet/fpga/6502/
+https://github.com/Arlet/verilog-6502
+Pretty simple: IRQ and NMI support, two files, which could be combined.
+Designed to work with FPGA Block RAMs, so: perfect.
+
+Oleg Odintsov
+http://opencores.org/project,ag_6502
+Looks fairly complicated.  Synthesizing state machine from another file.
+Only two files in the end.  Can handle the two-phase clock.
+
+Rob Finch
+http://web.archive.org/web/20100226175522/http://www.birdcomputer.ca/Projects/Prj6502/bc6502_page.html
+Lots of files
+------------------------------
+PS/2 Keyboard controller
+
+http://www.eecg.toronto.edu/~jayar/ece241_08F/AudioVideoCores/ps2/ps2.html
+(Looks like it was using code from Altera's University Program)
+
+https://www.altera.com/support/training/university/materials-ip-cores.html
+
+
+
+
+------------------------------
+ZRtech FPGA board
+
+Powered from +5V through USB
+USB also has a pl2303 UART adapter on it
+
+48.000 MHz external oscillator connected to pin 24
+(20.8333 ns)
+------------------------------
+Tricks:
+
+Problem with pin 101 being doubly assigned (to Altera_nCEO) :
+
+Assignments -> Device -> Device and Pin Options -> Dual-Purpose-Pins
+  set "nCEO" to "Use as regular I/O"
+
+Programmer: Auto-Detect
+  Choose EP4CE6 to disambiguate
+
+  Select output_files/top.sof as the program
+
+------------------------------
+Got serial working
+
+screen /dev/ttyUSB0 2400
+
+Install TTY jumper
+
+RS (to reset)
+
+Then Enter on the keyboard
+
+should display
+
+KIM
+0000 00
+
+(Also works at 300, 4800 baud)
+
+17F2: 0A 00  at 4800 baud
+17F2: 1A 00  at 2400 baud
+17F2: 8D 02  at 110 baud
+
+Loading from paper tape does work at 300 baud
+
+
+Procedure
+
+screen /dev/ttyUSB0 300
+Install TTY jumper
+RS
+Enter
+  KIM
+  xxxx xx
+L
+  (copy-and-paste e.g., CLOCK.TXT)
+0200G
+
+
+Doesn't work at 1200 or 600
+

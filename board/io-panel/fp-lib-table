@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "EP2C5")(type "KiCad")(uri "${KIPRJMOD}/EP2C5.pretty")(options "")(descr ""))
+  (lib (name "kim-1")(type "KiCad")(uri "/mnt/common/Retro/kim-1_pal-1/FPGA/board/kim-1-library/kim-1.pretty")(options "")(descr ""))
+)
