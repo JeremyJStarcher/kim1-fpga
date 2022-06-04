@@ -9,6 +9,13 @@ hdl/kim-1-ep2cs/kim.pin
 hdl/kim-1-ep2cs/kim.sof
 hdl/kim-1-ep2cs/kim.pof
 
+hdl/dueprologic/kim.done
+hdl/dueprologic/kim.pin
+hdl/dueprologics/kim.sof
+hdl/dueprologic/kim.pof
+
+hdl/dueprologic-blinky/
+
 
 board/kim1-earthpeople/kim1-earthpeople-backups
 board/kim1-earthpeople/_autosave-kim1-earthpeople.kicad_pcb

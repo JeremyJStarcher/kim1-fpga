@@ -1,0 +1,22 @@
+{
+	"system" : {
+		"platform" : "windows64",
+		"os_name" : "Windows 10",
+		"os_version" : "10.0"
+	},
+	"error" : {
+		"executable" : "quartus",
+		"comment" : "not_applicable",
+		"error_message" : "Access Violation at 0X00007FFF635B1AED",
+		"source_file" : "unknown",
+		"line" : "0",
+		"stack_trace" : "\t0x7fff635b1aec: saui_dset + 0x71aec (??_EDSET_VOLTAGE_PAGE@@UEAAPEAXI@Z + 0x3c)\n\t0x7fff6358e93b: saui_dset + 0x4e93b (?commit_changes@DSET_CONFIG_PAGE@@IEAA_NXZ + 0x1a2b)\n\t0x7fff6354bdb6: saui_dset + 0xbdb6 (??1?$QList@VQString@@@@QEAA@XZ + 0x6)\n\t0x7fff637d62b5: sys_mdb + 0x62b5 (?qt_static_metacall@MDB_CUSTOMIZE_DLG@@CAXPEAVQObject@@W4Call@QMetaObject@@HPEAPEAX@Z + 0x45)\n\t 0x5ac79a90: QtCore4 + 0x29a90 (?start@QThread@@QEAAXW4Priority@1@@Z + 0x400)\n\t0x7fffc7ee4f7e: MSVCR120 + 0x24f7e (_beginthreadex + 0x106)\n\t0x7fffc7ee5125: MSVCR120 + 0x25125 (_endthreadex + 0x191)\n\t0x7fffe10b54df: KERNEL32 + 0x154df (BaseThreadInitThunk + 0xf)\n\t0x7fffe200485a: ntdll + 0x485a (RtlUserThreadStart + 0x2a)\n",
+		"subsystem" : "unknown"
+	},
+	"quartus" : {
+		"quartus_bits" : "64",
+		"version" : "20.1.0",
+		"build" : "711",
+		"edition" : "Lite Edition"
+	}
+}
