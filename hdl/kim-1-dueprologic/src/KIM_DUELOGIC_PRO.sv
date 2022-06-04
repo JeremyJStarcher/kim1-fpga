@@ -6,8 +6,9 @@
  */
 
 module KIM_DUELOGIC_PRO (
-    input clk50,
-
+    // input clk50,
+	 input CLK_66,
+	 
     inout [7:0] PA,
     inout [7:0] PB,
 
@@ -40,15 +41,23 @@ module KIM_DUELOGIC_PRO (
     * PLLs can only divide a 50 MHz clock down to about 10 MHz.
     */
 
-  logic [4:0] clkcount = 5'h0;
+//  logic [4:0] clkcount = 5'h0;
+//  logic       clk = 1'b0;
+//  always @(posedge clk50) begin
+//    if (clkcount == 5'd24) begin
+//      clkcount <= 5'd0;
+//      clk <= ~clk;
+//    end else clkcount <= clkcount + 5'd1;
+//  end
+
+  logic [5:0] clkcount = 6'h0;
   logic       clk = 1'b0;
-  always @(posedge clk50) begin
-    if (clkcount == 5'd24) begin
+  always @(posedge CLK_66) begin
+    if (clkcount == 6'd31) begin
       clkcount <= 5'd0;
       clk <= ~clk;
-    end else clkcount <= clkcount + 5'd1;
+    end else clkcount <= clkcount + 6'd1;
   end
-
   KIM_1 TOP (
       .PAI(PA),
       .PBI(PB),
@@ -59,7 +68,7 @@ module KIM_DUELOGIC_PRO (
       .DI(),
       .AB(),
       .WE(),
-      .reset(~KEY || ~RS_KEY),
+      .reset(/*~KEY || */ ~RS_KEY),
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),

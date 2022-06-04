@@ -56,86 +56,9 @@ set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-
-
-
-set_location_assignment PIN_136 -to XIO_1[0]
-set_location_assignment PIN_137 -to XIO_1[1]
-set_location_assignment PIN_138 -to XIO_1[2]
-set_location_assignment PIN_142 -to XIO_1[4]
-set_location_assignment PIN_143 -to XIO_1[5]
-set_location_assignment PIN_144 -to XIO_1[6]
-set_location_assignment PIN_7 -to XIO_1[7]
-set_location_assignment PIN_135 -to XIO_3[5]
-set_location_assignment PIN_133 -to XIO_3[4]
-set_location_assignment PIN_132 -to XIO_3[3]
-set_location_assignment PIN_129 -to XIO_3[2]
-set_location_assignment PIN_128 -to XIO_3[1]
-set_location_assignment PIN_127 -to XIO_3[0]
-set_location_assignment PIN_105 -to XIO_6[7]
-set_location_assignment PIN_106 -to XIO_6[6]
-set_location_assignment PIN_110 -to XIO_6[5]
-set_location_assignment PIN_111 -to XIO_6[4]
-set_location_assignment PIN_112 -to XIO_6[3]
-set_location_assignment PIN_113 -to XIO_6[2]
-set_location_assignment PIN_114 -to XIO_6[1]
-set_location_assignment PIN_115 -to XIO_6[0]
-set_location_assignment PIN_59 -to XIO_7[3]
-set_location_assignment PIN_69 -to XIO_6[31]
-set_location_assignment PIN_70 -to XIO_6[30]
-set_location_assignment PIN_71 -to XIO_6[29]
-set_location_assignment PIN_72 -to XIO_6[28]
-set_location_assignment PIN_75 -to XIO_6[27]
-set_location_assignment PIN_74 -to XIO_6[26]
-set_location_assignment PIN_73 -to XIO_6[25]
-set_location_assignment PIN_76 -to XIO_6[24]
-set_location_assignment PIN_77 -to XIO_6[23]
-set_location_assignment PIN_80 -to XIO_6[22]
-set_location_assignment PIN_83 -to XIO_6[21]
-set_location_assignment PIN_84 -to XIO_6[20]
-set_location_assignment PIN_85 -to XIO_6[19]
-set_location_assignment PIN_86 -to XIO_6[18]
-set_location_assignment PIN_87 -to XIO_6[17]
-set_location_assignment PIN_98 -to XIO_6[13]
-set_location_assignment PIN_99 -to XIO_6[12]
-set_location_assignment PIN_100 -to XIO_6[11]
-set_location_assignment PIN_101 -to XIO_6[10]
-set_location_assignment PIN_103 -to XIO_6[9]
-set_location_assignment PIN_104 -to XIO_6[8]
-set_location_assignment PIN_68 -to XIO_7[0]
-set_location_assignment PIN_64 -to XIO_7[1]
-set_location_assignment PIN_60 -to XIO_7[2]
 set_global_assignment -name ENABLE_OCT_DONE OFF
 set_global_assignment -name STRATIXV_CONFIGURATION_SCHEME "PASSIVE SERIAL"
 set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
-set_location_assignment PIN_65 -to XIO_6[16]
-set_location_assignment PIN_58 -to XIO_6[14]
-set_location_assignment PIN_51 -to XIO_6[15]
-set_location_assignment PIN_23 -to CLK_66MHZ
-set_location_assignment PIN_89 -to RST
-set_location_assignment PIN_141 -to XIO_1[3]
-set_location_assignment PIN_43 -to UART_IN
-set_location_assignment PIN_38 -to UART_OUT
-set_location_assignment PIN_126 -to XIO_5[5]
-set_location_assignment PIN_125 -to XIO_5[4]
-set_location_assignment PIN_124 -to XIO_5[3]
-set_location_assignment PIN_50 -to XIO_4[5]
-set_location_assignment PIN_121 -to XIO_5[2]
-set_location_assignment PIN_120 -to XIO_5[1]
-set_location_assignment PIN_119 -to XIO_5[0]
-set_location_assignment PIN_49 -to XIO_4[4]
-set_location_assignment PIN_42 -to XIO_4[3]
-set_location_assignment PIN_44 -to XIO_4[2]
-set_location_assignment PIN_46 -to XIO_4[1]
-set_location_assignment PIN_31 -to XIO_4[0]
-set_location_assignment PIN_52 -to XIO_2[0]
-set_location_assignment PIN_53 -to XIO_2[1]
-set_location_assignment PIN_66 -to XIO_2[2]
-set_location_assignment PIN_67 -to XIO_2[3]
-set_location_assignment PIN_54 -to XIO_2[4]
-set_location_assignment PIN_55 -to XIO_2[5]
-set_location_assignment PIN_25 -to PB_SWITCH_1
-set_location_assignment PIN_24 -to PB_SWITCH_2
 
 set_global_assignment -name SYSTEMVERILOG_FILE ../src/mcs6530.sv
 set_global_assignment -name VERILOG_FILE ../src/mcs6502.v
@@ -145,7 +68,92 @@ set_global_assignment -name SYSTEMVERILOG_FILE ../src/KIM_1.sv
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+
+
+set_location_assignment PIN_23 -to CLK_66
+
+set_location_assignment PIN_68 -to LED[0]
+set_location_assignment PIN_64 -to LED[1]
+set_location_assignment PIN_60 -to LED[2]
+set_location_assignment PIN_25 -to KEY
+set_location_assignment PIN_24 -to KEY2
+
+
+set_location_assignment PIN_105 -to LED_DIG[4]
+set_location_assignment PIN_103 -to LED_DIG[5]
+set_location_assignment PIN_100 -to LED_DIG[6]
+set_location_assignment PIN_98 -to LED_DIG[7]
+set_location_assignment PIN_51 -to LED_DIG[8]
+set_location_assignment PIN_87 -to LED_DIG[9]
+
+
+set_location_assignment PIN_69 -to LED_SEG[0]
+set_location_assignment PIN_71 -to LED_SEG[1]
+set_location_assignment PIN_75 -to LED_SEG[2]
+set_location_assignment PIN_73 -to LED_SEG[3]
+set_location_assignment PIN_77 -to LED_SEG[4]
+set_location_assignment PIN_83 -to LED_SEG[5]
+set_location_assignment PIN_85 -to LED_SEG[6]
+######
+
+set_location_assignment PIN_111 -to SST_KEY
+set_location_assignment PIN_106 -to ST_KEY
+set_location_assignment PIN_104 -to RS_KEY
+set_location_assignment PIN_101 -to ENABLE_TTY
+
+set_location_assignment PIN_65 -to KB_ROW[0]
+set_location_assignment PIN_58 -to KB_ROW[1]
+set_location_assignment PIN_99 -to KB_ROW[2]
+# set_location_assignment PIN_99 -to KB_ROW[3]
+
+
+set_location_assignment PIN_70 -to KB_COL[0]
+set_location_assignment PIN_72 -to KB_COL[1]
+set_location_assignment PIN_74 -to KB_COL[2]
+set_location_assignment PIN_76 -to KB_COL[3]
+set_location_assignment PIN_80 -to KB_COL[4]
+set_location_assignment PIN_84 -to KB_COL[5]
+set_location_assignment PIN_86 -to KB_COL[6]
+
+
+set_location_assignment PIN_125 -to TTYO
+set_location_assignment PIN_126 -to TTYI
+
+set_location_assignment PIN_7 -to PA[0]
+set_location_assignment PIN_144 -to PA[1]
+set_location_assignment PIN_143 -to PA[2]
+set_location_assignment PIN_142 -to PA[3]
+set_location_assignment PIN_141 -to PA[4]
+set_location_assignment PIN_138 -to PA[5]
+set_location_assignment PIN_137 -to PA[6]
+set_location_assignment PIN_136 -to PA[7]
+set_location_assignment PIN_55 -to PB[0]
+set_location_assignment PIN_54 -to PB[1]
+set_location_assignment PIN_67 -to PB[2]
+set_location_assignment PIN_66 -to PB[3]
+set_location_assignment PIN_53 -to PB[4]
+set_location_assignment PIN_52 -to PB[5]
+set_location_assignment PIN_121 -to PB[6]
+set_location_assignment PIN_124 -to PB[7]
+set_location_assignment PIN_120 -to AUDIOO
+set_location_assignment PIN_119 -to AUDIOI
+
+# set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KEY
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[0]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[1]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[2]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[3]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[4]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[5]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[6]
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to RS_KEY
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ST_KEY
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to SST_KEY
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ENABLE_TTY
+
+
+
+
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[27]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[26]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[25]
@@ -157,3 +165,4 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[20]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[19]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[18]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to XIO_6[17]
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
