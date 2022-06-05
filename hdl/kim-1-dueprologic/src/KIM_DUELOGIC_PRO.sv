@@ -50,13 +50,13 @@ module KIM_DUELOGIC_PRO (
 //    end else clkcount <= clkcount + 5'd1;
 //  end
 
-  logic [5:0] clkcount = 6'h0;
+  logic [7:0] clkcount = 8'h0;
   logic       clk = 1'b0;
   always @(posedge CLK_66) begin
-    if (clkcount == 6'd31) begin
-      clkcount <= 5'd0;
+    if (clkcount == 8'd32) begin
+      clkcount <= 8'd0;
       clk <= ~clk;
-    end else clkcount <= clkcount + 6'd1;
+    end else clkcount <= clkcount + 8'd1;
   end
   KIM_1 TOP (
       .PAI(PA),
@@ -68,7 +68,7 @@ module KIM_DUELOGIC_PRO (
       .DI(),
       .AB(),
       .WE(),
-      .reset(/*~KEY || */ ~RS_KEY),
+      .reset(~KEY || ~RS_KEY),
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
