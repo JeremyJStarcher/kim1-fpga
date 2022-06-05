@@ -1,8 +1,11 @@
 /*
- * Top level of the KIM-1 model for an EP2C5T144 minimal board
- * 
+ * Top level of the KIM-1 model for an DUELOGICPRO minimal board
+ *
  * Stephen A. Edwards
  * sedwards@cs.columbia.edu
+ * Modified by
+ * Jeremy J Starcher
+ *
  */
 
 module KIM_DUELOGIC_PRO (
@@ -30,7 +33,6 @@ module KIM_DUELOGIC_PRO (
 
     output [2:0] LED,
     input        KEY
-	 
 
 );
 
