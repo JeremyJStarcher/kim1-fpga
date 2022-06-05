@@ -58,6 +58,7 @@ module KIM_DUELOGIC_PRO (
       clk <= ~clk;
     end else clkcount <= clkcount + 8'd1;
   end
+
   KIM_1 TOP (
       .PAI(PA),
       .PBI(PB),
@@ -72,6 +73,7 @@ module KIM_DUELOGIC_PRO (
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
+      .clk(clk),
       .*
   );
 
