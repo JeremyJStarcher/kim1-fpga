@@ -63,6 +63,7 @@ module KIM_EP2C5 (
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
+      .clk(clk),
       .*
   );
 
