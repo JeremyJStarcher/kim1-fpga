@@ -16,3 +16,6 @@ hdl/dueprologic-blinky/
 
 board/kim1-earthpeople/kim1-earthpeople-backups
 board/kim1-earthpeople/_autosave-kim1-earthpeople.kicad_pcb
+/**/*.pof
+/**/*.sof
+/**/*.qws
