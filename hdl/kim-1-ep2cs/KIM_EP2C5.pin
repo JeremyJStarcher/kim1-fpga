@@ -107,16 +107,16 @@ KB_ROW[0]                    : 40        : output : 3.3-V LVTTL       :         
 LED_SEG[1]                   : 41        : output : 3.3-V LVTTL       :         : 4         : Y              
 KB_ROW[2]                    : 42        : output : 3.3-V LVTTL       :         : 4         : Y              
 KB_ROW[1]                    : 43        : output : 3.3-V LVTTL       :         : 4         : Y              
-KB_COL[0]                    : 44        : input  : 3.3-V LVTTL       :         : 4         : Y              
-KB_COL[1]                    : 45        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[6]                    : 44        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[5]                    : 45        : input  : 3.3-V LVTTL       :         : 4         : Y              
 VCCIO4                       : 46        : power  :                   : 3.3V    : 4         :                
-KB_COL[2]                    : 47        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[4]                    : 47        : input  : 3.3-V LVTTL       :         : 4         : Y              
 KB_COL[3]                    : 48        : input  : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : 49        : gnd    :                   :         :           :                
 VCCINT                       : 50        : power  :                   : 1.2V    :           :                
-KB_COL[4]                    : 51        : input  : 3.3-V LVTTL       :         : 4         : Y              
-KB_COL[5]                    : 52        : input  : 3.3-V LVTTL       :         : 4         : Y              
-KB_COL[6]                    : 53        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[2]                    : 51        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[1]                    : 52        : input  : 3.3-V LVTTL       :         : 4         : Y              
+KB_COL[0]                    : 53        : input  : 3.3-V LVTTL       :         : 4         : Y              
 VCCIO4                       : 54        : power  :                   : 3.3V    : 4         :                
 SST_SWITCH                   : 55        : input  : 3.3-V LVTTL       :         : 4         : Y              
 GND                          : 56        : gnd    :                   :         :           :                

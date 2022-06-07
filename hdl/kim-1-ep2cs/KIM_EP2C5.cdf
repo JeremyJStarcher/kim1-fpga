@@ -4,10 +4,10 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP2C5T144) Path("L:/Retro/kim-1_pal-1/FPGA/fpga-working/j/kim1/") File("KIM_EP2C5.sof") MfrSpec(OpMask(1));
+		Device PartName(EPCS4) Path("L:/Retro/kim-1_pal-1/kim1-fpga/hdl/kim-1-ep2cs/") File("KIM_EP2C5.pof") MfrSpec(OpMask(1) Child_OpMask(1 1));
 
 ChainEnd;
 
 AlteraBegin;
-	ChainType(JTAG);
+	ChainType(asc);
 AlteraEnd;
