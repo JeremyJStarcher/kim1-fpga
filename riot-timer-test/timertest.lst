@@ -1,0 +1,287 @@
+ca65 V2.18 - Ubuntu 2.19-1
+Main file   : timertest.s
+Current file: timertest.s
+
+000000r 1               TESTID = $01
+000000r 1               POINTL = $10
+000000r 1               POINTH = $11
+000000r 1               TMPA = $12
+000000r 1               TMPX = $13
+000000r 1               TMPY = $14
+000000r 1               ATIME = $15 ; Actual time
+000000r 1               ASTAT = $16 ; Actual status
+000000r 1               ETIME = $17 ; Expected time
+000000r 1               ESTAT = $18 ; Expected status
+000000r 1               RESULT = $19;
+000000r 1               
+000000r 1                       .ORG $0200
+000200  1               
+000200  1               
+000200  1               ; The 'USER' timers
+000200  1               ;T0001 = $1704
+000200  1               ;T0008 = $1705
+000200  1               ;T0064 = $1706
+000200  1               ;T1024 = $1707
+000200  1               ;TSTATUS = $1707
+000200  1               ;TREAD_TIME = $1706
+000200  1               
+000200  1               ; The 'SYSTEM' timers
+000200  1               T0001 = $1744
+000200  1               T0008 = $1745
+000200  1               T0064 = $1746
+000200  1               T1024 = $1747
+000200  1               
+000200  1               TI0001 = $1744 +8
+000200  1               TI0008 = $1745 +8
+000200  1               TI0064 = $1746 +8
+000200  1               TI1024 = $1747 +8
+000200  1               
+000200  1               
+000200  1               TSTATUS = $1747
+000200  1               TREAD_TIME = $1746
+000200  1               
+000200  1               SAD = $1740 ; character to output
+000200  1               SBD = $1742 ; segment to output data
+000200  1               PADD = $1741 ; 6530 RIOT data direction
+000200  1               
+000200  1               
+000200  1               ; ROM ROUTINES
+000200  1               OUTCH = $1EA0
+000200  1               PRTBYT = $1E3B ; byte in A register
+000200  1               CRLF = $1E2F
+000200  1               OUTSP = $1E9E
+000200  1               GETKEY = $1F6A
+000200  1               
+000200  1               .macro pushall
+000200  1                       ; non-destructive push-all to boot
+000200  1                       sta TMPA
+000200  1               
+000200  1                       PHA
+000200  1                       TYA
+000200  1                       PHA
+000200  1                       TXA
+000200  1                       PHA
+000200  1               
+000200  1                       lda TMPA
+000200  1               .endmacro
+000200  1               
+000200  1               .macro pullall
+000200  1                       PLA
+000200  1                       TAX
+000200  1                       PLA
+000200  1                       TAY
+000200  1                       PLA
+000200  1               .endmacro
+000200  1               
+000200  1               .macro end_test  arg1, arg2, arg3
+000200  1               .scope
+000200  1                       LDA TSTATUS
+000200  1                       LDY TREAD_TIME
+000200  1               
+000200  1                       STA ASTAT
+000200  1                       STY ATIME
+000200  1               
+000200  1                       LDA #arg2
+000200  1                       STA ESTAT
+000200  1                       LDA #arg3
+000200  1                       STA ETIME
+000200  1               
+000200  1                       print_string arg1
+000200  1                       JSR run_end_test
+000200  1               .endscope
+000200  1               .endmacro
+000200  1               
+000200  1               .macro print_string text
+000200  1               .scope
+000200  1                       jmp skip
+000200  1               l:
+000200  1                       .byte text
+000200  1                       .byte 0
+000200  1               skip:
+000200  1                       pushall
+000200  1                       LDA #<l
+000200  1                       STA POINTL;
+000200  1                       LDA #>l
+000200  1                       STA POINTH
+000200  1                       JSR OUT_STRING
+000200  1                       pullall
+000200  1               .endscope
+000200  1               .endmacro
+000200  1               
+000200  1               ;;;;;;;;;;;;;;;;;;; MAIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+000200  1               
+000200  1  20 2F 1E             JSR CRLF
+000203  1  20 2F 1E             JSR CRLF
+000206  1               
+000206  1  4C 1E 02 36          print_string "6530/6532 TIMER TEST"
+00020A  1  35 33 30 2F  
+00020E  1  36 35 33 32  
+000237  1  20 2F 1E             JSR CRLF
+00023A  1  4C 76 02 44          print_string "DEVELOPED AGAINT REAL HARDWARE USED TO TEST SIMULATIONS "
+00023E  1  45 56 45 4C  
+000242  1  4F 50 45 44  
+00028F  1  4C A1 02 41          print_string "AND EMULATIONS"
+000293  1  4E 44 20 45  
+000297  1  4D 55 4C 41  
+0002BA  1  20 2F 1E             JSR CRLF
+0002BD  1  20 2F 1E             JSR CRLF
+0002C0  1  20 2F 1E             JSR CRLF
+0002C3  1               
+0002C3  1  A9 00                LDA #$00
+0002C5  1  85 01                STA TESTID
+0002C7  1               
+0002C7  1               ;;;;;;;;;;;; TESTS START HERE
+0002C7  1               .scope
+0002C7  1  20 86 03      JSR PRINT_TEST_ID
+0002CA  1               
+0002CA  1  A9 FF         LDA #$FF
+0002CC  1  8D 44 17      STA T0001
+0002CF  1  EA            NOP
+0002D0  1               
+0002D0  1  AD 47 17 AC   end_test "T0001 NO INTERRUPT - BASIC COUNTDOWN", $40, $F5
+0002D4  1  46 17 85 16  
+0002D8  1  84 15 A9 40  
+000326  1               .endscope
+000326  1               
+000326  1               
+000326  1               .scope
+000326  1  20 86 03      JSR PRINT_TEST_ID
+000329  1               
+000329  1  A9 FF         LDA #$FF
+00032B  1  8D 4C 17      STA TI0001
+00032E  1  EA            NOP
+00032F  1               
+00032F  1  AD 47 17 AC   end_test "T0001 W/ INTERRUPT - BASIC COUNTDOWN", $00, $F5
+000333  1  46 17 85 16  
+000337  1  84 15 A9 00  
+000385  1               .endscope
+000385  1               
+000385  1               
+000385  1               
+000385  1               
+000385  1  00            BRK
+000386  1               
+000386  1               ;;;;; ROUTINES
+000386  1               
+000386  1               PRINT_TEST_ID:
+000386  1  4C 90 03 54          print_string "TEST #"
+00038A  1  45 53 54 20  
+00038E  1  23 00 85 12  
+0003A9  1  A5 01                LDA TESTID
+0003AB  1  20 3B 1E             JSR PRTBYT
+0003AE  1  20 9E 1E             JSR OUTSP
+0003B1  1  E6 01                INC TESTID
+0003B3  1  60                   RTS
+0003B4  1               
+0003B4  1               
+0003B4  1               OUT_STRING:
+0003B4  1               .proc outstring
+0003B4  1  A0 00                LDY #$00
+0003B6  1               l1:
+0003B6  1  85 12 48 98          pushall
+0003BA  1  48 8A 48 A5  
+0003BE  1  12           
+0003BF  1  B1 10                LDA (POINTL),Y
+0003C1  1  F0 0C                BEQ exit
+0003C3  1  20 A0 1E             JSR OUTCH
+0003C6  1  68 AA 68 A8          pullall
+0003CA  1  68           
+0003CB  1               
+0003CB  1  C8                   INY
+0003CC  1               
+0003CC  1  4C B6 03             JMP l1
+0003CF  1               exit:
+0003CF  1  68 AA 68 A8          pullall
+0003D3  1  68           
+0003D4  1  60                   RTS
+0003D5  1               .endproc
+0003D5  1               
+0003D5  1               
+0003D5  1               .proc run_end_test
+0003D5  1  85 12 48 98          pushall
+0003D9  1  48 8A 48 A5  
+0003DD  1  12           
+0003DE  1  20 9E 1E             jsr OUTSP
+0003E1  1               
+0003E1  1  A5 16                lda ASTAT
+0003E3  1  20 3B 1E             jsr PRTBYT
+0003E6  1  20 9E 1E             jsr OUTSP
+0003E9  1               
+0003E9  1  A5 15                lda ATIME
+0003EB  1  20 3B 1E             jsr PRTBYT
+0003EE  1  20 9E 1E             jsr OUTSP
+0003F1  1               
+0003F1  1  68 AA 68 A8          pullall
+0003F5  1  68           
+0003F6  1               
+0003F6  1                       ; Reset the test result
+0003F6  1  A9 00                lda #$00
+0003F8  1  85 19                sta RESULT
+0003FA  1               
+0003FA  1  A5 16                LDA ASTAT
+0003FC  1  C5 18                CMP ESTAT
+0003FE  1  F0 4E                BEQ testtime
+000400  1  4C 0B 04 28          print_string "(ESTAT "
+000404  1  45 53 54 41  
+000408  1  54 20 00 8D  
+000426  1  A5 18                LDA ESTAT
+000428  1  20 3B 1E             jsr PRTBYT
+00042B  1  4C 31 04 29          print_string ") "
+00042F  1  20 00 8D 12  
+000433  1  00 48 98 48  
+00044C  1  E6 19                inc RESULT
+00044E  1               
+00044E  1               testtime:
+00044E  1  A5 15                LDA ATIME
+000450  1  C5 17                CMP ETIME
+000452  1  F0 4E                BEQ done
+000454  1  4C 5F 04 28          print_string "(ETIME "
+000458  1  45 54 49 4D  
+00045C  1  45 20 00 8D  
+00047A  1  A5 17                LDA ETIME
+00047C  1  20 3B 1E             jsr PRTBYT
+00047F  1  4C 85 04 29          print_string ") "
+000483  1  20 00 8D 12  
+000487  1  00 48 98 48  
+0004A0  1               
+0004A0  1  E6 19                inc RESULT
+0004A2  1               
+0004A2  1               done:
+0004A2  1  4C AE 04 52          print_string "RESULT: "
+0004A6  1  45 53 55 4C  
+0004AA  1  54 3A 20 00  
+0004C9  1  A5 19                LDA RESULT
+0004CB  1  20 3B 1E             jsr PRTBYT
+0004CE  1  20 2F 1E             jsr CRLF
+0004D1  1  60                   RTS
+0004D2  1               .endproc
+0004D2  1               
+0004D2  1               ; If the Z flag is 0, then A <> NUM and BNE will branch
+0004D2  1               ; If the Z flag is 1, then A = NUM and BEQ will branch
+0004D2  1               ; If the C flag is 0, then A (unsigned) < NUM (unsigned) and BCC will branch
+0004D2  1               ; If the C flag is 1, then A (unsigned) >= NUM (unsigned) and BCS will branch
+0004D2  1               
+0004D2  1               
+0004D2  1               ; Write Timer  RS  R/W  A4   A3  A2  A1  A0
+0004D2  1               ;    1T         1    0   1  (a)   1   0   0
+0004D2  1               ;    8T         1    0   1  (a)   1   0   1
+0004D2  1               ;   64T         1    0   1  (a)   1   1   0
+0004D2  1               ; 1024T         1    0   1  (a)   1   1   1
+0004D2  1               
+0004D2  1               ; Read Timer
+0004D2  1               ;               1    1   -  (a)   1   -   1
+0004D2  1               
+0004D2  1               ; Read Interrupt Flags
+0004D2  1               ;               1    1   -    -   1   -   1
+0004D2  1               ; Write Edge Detect Control
+0004D2  1               ;               1    0   0    -   1  (b) (c)
+0004D2  1               
+0004D2  1                ; (a) A3=0 disable interrupt from timer to IRQB
+0004D2  1                ;     A3=1 to enable interrupt timer to IRQB
+0004D2  1                ; (b) A1=0 to disable interrupt from PA7 to IRCB
+0004D2  1                ;     A1=1 to enable interrupt from PA7 to IRCB
+0004D2  1                ; (c)
+0004D2  1                ; A0=0 for negative edge-detect
+0004D2  1                ; A0=1 for positive edge-detect
+0004D2  1               ; $1744 = 1011101000100 (PIN A4 is inverted on the schematic)
+0004D2  1               
