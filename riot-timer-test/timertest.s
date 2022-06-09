@@ -14,27 +14,27 @@ RESULT = $19;
 
 
 ; The 'USER' timers
-;T0001 = $1704
-;T0008 = $1705
-;T0064 = $1706
-;T1024 = $1707
-;TSTATUS = $1707
-;TREAD_TIME = $1706
+T0001 = $1704
+T0008 = $1705
+T0064 = $1706
+T1024 = $1707
+TSTATUS = $1707
+TREAD_TIME = $1706
 
 ; The 'SYSTEM' timers
-T0001 = $1744
-T0008 = $1745
-T0064 = $1746
-T1024 = $1747
+;T0001 = $1744
+;T0008 = $1745
+;T0064 = $1746
+;T1024 = $1747
 
-TI0001 = $1744 +8
-TI0008 = $1745 +8
-TI0064 = $1746 +8
-TI1024 = $1747 +8
+TI0001 = T0001 +8
+TI0008 = T0008 +8
+TI0064 = T0064 +8
+TI1024 = T1024 +8
 
 
-TSTATUS = $1747
-TREAD_TIME = $1746
+;TSTATUS = $1747
+;TREAD_TIME = $1746
 
 SAD = $1740 ; character to output
 SBD = $1742 ; segment to output data
@@ -51,21 +51,21 @@ GETKEY = $1F6A
 .macro pushall
         ; non-destructive push-all to boot
         sta TMPA
- 
+
         PHA
-        TYA 
-        PHA 
-        TXA 
+        TYA
+        PHA
+        TXA
         PHA
 
         lda TMPA
 .endmacro
 
-.macro pullall 
-        PLA 
-        TAX 
-        PLA 
-        TAY 
+.macro pullall
+        PLA
+        TAX
+        PLA
+        TAY
         PLA
 .endmacro
 
@@ -90,7 +90,7 @@ GETKEY = $1F6A
 .macro print_string text
 .scope
         jmp skip
-l: 
+l:
         .byte text
         .byte 0
 skip:
@@ -121,33 +121,62 @@ skip:
         STA TESTID
 
 ;;;;;;;;;;;; TESTS START HERE
+
 .scope
- JSR PRINT_TEST_ID
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA T0001
+        NOP
+        end_test "T0001 - BASIC COUNTDOWN", $00, $F5
+.endscope
 
- LDA #$FF
- STA T0001
- NOP
+;;;;;;;;;;;; TESTS START HERE
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$01
+        STA T0001
+        NOP
+        end_test "T0001 - BASIC COUNTDOWN (OVERFLOW)", $80, $F7
+.endscope
 
- end_test "T0001 NO INTERRUPT - BASIC COUNTDOWN", $40, $F5
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA TI0001
+        NOP
+        end_test "TI0001 - BASIC COUNTDOWN", $00, $F5
+.endscope
+
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$01
+        STA TI0001
+        NOP
+        end_test "TI0001 - BASIC COUNTDOWN (OVERFLOW)", $80, $F7
 .endscope
 
 
 .scope
- JSR PRINT_TEST_ID
-
- LDA #$FF
- STA TI0001
- NOP
-
- end_test "T0001 W/ INTERRUPT - BASIC COUNTDOWN", $00, $F5
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA T0008
+        NOP
+        end_test "T0008 - BASIC COUNTDOWN", $00, $FD
 .endscope
 
 
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA TI0008
+        NOP
+        end_test "TI0008 - BASIC COUNTDOWN", $00, $FD
+.endscope
 
 
  BRK
- 
-;;;;; ROUTINES 
+
+;;;;; ROUTINES
 
 PRINT_TEST_ID:
         print_string "TEST #"
@@ -169,7 +198,7 @@ l1:
         pullall
 
         INY
- 
+
         JMP l1
 exit:
         pullall
@@ -190,7 +219,7 @@ exit:
         jsr OUTSP
 
         pullall
- 
+
         ; Reset the test result
         lda #$00
         sta RESULT
@@ -242,7 +271,7 @@ done:
 ;               1    1   -    -   1   -   1
 ; Write Edge Detect Control
 ;               1    0   0    -   1  (b) (c)
-    
+
  ; (a) A3=0 disable interrupt from timer to IRQB
  ;     A3=1 to enable interrupt timer to IRQB
  ; (b) A1=0 to disable interrupt from PA7 to IRCB
