@@ -1,0 +1,20 @@
+ca65 V2.18 - Ubuntu 2.19-1
+Main file   : reset.s
+Current file: reset.s
+
+000000r 1                      .ORG $0200
+000200  1               
+000200  1  A9 00            LDA #$00
+000202  1                   ; STA $00F1
+000202  1  8D F9 17         STA $17F9
+000205  1  8D FA 17         STA $17FA
+000208  1  8D FC 17         STA $17FC
+00020B  1  8D FE 17         STA $17FE
+00020E  1               
+00020E  1  A9 1C            LDA #$1C
+000210  1  8D FB 17         STA $17FB
+000213  1  8D FD 17         STA $17FD
+000216  1  8D FF 17         STA $17FF
+000219  1               
+000219  1  00               brk
+000219  1               
