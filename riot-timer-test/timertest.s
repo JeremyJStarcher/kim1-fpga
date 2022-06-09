@@ -125,6 +125,14 @@ skip:
 
 ;;;;;;;;;;;; TESTS START HERE
 
+;;; T0001
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$00
+        STA T0001
+        end_test "T0001 - Starting at $00", $80, $F8
+.endscope
+
 .scope
         JSR PRINT_TEST_ID
         LDA #$FF
@@ -133,7 +141,6 @@ skip:
         end_test "T0001 - BASIC COUNTDOWN", $00, $F5
 .endscope
 
-;;;;;;;;;;;; TESTS START HERE
 .scope
         JSR PRINT_TEST_ID
         LDA #$01
@@ -159,6 +166,8 @@ skip:
 .endscope
 
 
+
+;;; T0008
 .scope
         JSR PRINT_TEST_ID
         LDA #$FF
@@ -175,6 +184,54 @@ skip:
         NOP
         end_test "TI0008 - BASIC COUNTDOWN", $00, $FD
 .endscope
+
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$01
+        STA TI0008
+
+        .repeat 20, I
+                NOP
+        .endrep
+
+        end_test "TI0008 - BASIC COUNTDOWN (OVERFLOW)", $80, $D8
+.endscope
+
+
+;;; T0064
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA T0064
+        NOP
+        end_test "T0064 - BASIC COUNTDOWN", $00, $FE
+.endscope
+
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$01
+        STA T0064
+        jsr long_delay
+        end_test "T0064 - BASIC COUNTDOWN (OVERFLOW)", $80, $20
+.endscope
+
+;; T1024
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$FF
+        STA T1024
+        NOP
+        end_test "T1024 - BASIC COUNTDOWN", $00, $FE
+.endscope
+
+.scope
+        JSR PRINT_TEST_ID
+        LDA #$1
+        STA T1024
+        jsr long_delay
+        end_test "T1024 - BASIC COUNTDOWN  (OVERFLOW)", $80, $E0
+.endscope
+
 
 .scope
         lda FINAL_RESULT
@@ -269,6 +326,23 @@ good:
 exit:
         jsr CRLF
         RTS
+.endproc
+
+.proc long_delay
+.scope
+        LDY #$FF              ;MULTIPLY FACTOR
+DLY1:   LDX #$FF              ;DELAY TIME
+DLY2:   DEX
+        JSR dummy
+        BNE DLY2
+        DEY
+        BNE DLY1
+        RTS
+
+; Burn cycles calling this
+dummy:
+        RTS
+.endscope
 .endproc
 
 ; If the Z flag is 0, then A <> NUM and BNE will branch

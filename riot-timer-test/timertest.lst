@@ -135,217 +135,305 @@ Current file: timertest.s
 0002C9  1               
 0002C9  1               ;;;;;;;;;;;; TESTS START HERE
 0002C9  1               
+0002C9  1               ;;; T0001
 0002C9  1               .scope
-0002C9  1  20 2A 05             JSR PRINT_TEST_ID
-0002CC  1  A9 FF                LDA #$FF
+0002C9  1  20 4F 07             JSR PRINT_TEST_ID
+0002CC  1  A9 00                LDA #$00
 0002CE  1  8D 04 17             STA T0001
-0002D1  1  EA                   NOP
-0002D2  1  AD 07 17 AC          end_test "T0001 - BASIC COUNTDOWN", $00, $F5
-0002D6  1  06 17 85 16  
-0002DA  1  84 15 A9 00  
-00031B  1               .endscope
-00031B  1               
-00031B  1               ;;;;;;;;;;;; TESTS START HERE
-00031B  1               .scope
-00031B  1  20 2A 05             JSR PRINT_TEST_ID
-00031E  1  A9 01                LDA #$01
-000320  1  8D 04 17             STA T0001
-000323  1  EA                   NOP
-000324  1  AD 07 17 AC          end_test "T0001 - BASIC COUNTDOWN (OVERFLOW)", $81, $F7
-000328  1  06 17 85 16  
-00032C  1  84 15 A9 81  
-000378  1               .endscope
-000378  1               
-000378  1               .scope
-000378  1  20 2A 05             JSR PRINT_TEST_ID
-00037B  1  A9 FF                LDA #$FF
-00037D  1  8D 0C 17             STA TI0001
-000380  1  EA                   NOP
-000381  1  AD 07 17 AC          end_test "TI0001 - BASIC COUNTDOWN", $00, $F5
-000385  1  06 17 85 16  
-000389  1  84 15 A9 00  
-0003CB  1               .endscope
-0003CB  1               
-0003CB  1               .scope
-0003CB  1  20 2A 05             JSR PRINT_TEST_ID
-0003CE  1  A9 01                LDA #$01
-0003D0  1  8D 0C 17             STA TI0001
-0003D3  1  EA                   NOP
-0003D4  1  AD 07 17 AC          end_test "TI0001 - BASIC COUNTDOWN (OVERFLOW)", $80, $F7
-0003D8  1  06 17 85 16  
-0003DC  1  84 15 A9 80  
-000429  1               .endscope
-000429  1               
-000429  1               
-000429  1               .scope
-000429  1  20 2A 05             JSR PRINT_TEST_ID
-00042C  1  A9 FF                LDA #$FF
-00042E  1  8D 05 17             STA T0008
-000431  1  EA                   NOP
-000432  1  AD 07 17 AC          end_test "T0008 - BASIC COUNTDOWN", $00, $FD
-000436  1  06 17 85 16  
-00043A  1  84 15 A9 00  
-00047B  1               .endscope
-00047B  1               
-00047B  1               
-00047B  1               .scope
-00047B  1  20 2A 05             JSR PRINT_TEST_ID
-00047E  1  A9 FF                LDA #$FF
-000480  1  8D 0D 17             STA TI0008
-000483  1  EA                   NOP
-000484  1  AD 07 17 AC          end_test "TI0008 - BASIC COUNTDOWN", $00, $FD
-000488  1  06 17 85 16  
-00048C  1  84 15 A9 00  
-0004CE  1               .endscope
-0004CE  1               
-0004CE  1               .scope
-0004CE  1  A5 20                lda FINAL_RESULT
-0004D0  1  D0 2E                bne tests_passed
-0004D2  1  4C E4 04 41          print_string "ALL TESTS PASS"
-0004D6  1  4C 4C 20 54  
-0004DA  1  45 53 54 53  
-0004FD  1  4C 29 05             jmp fin
-000500  1               
-000500  1               tests_passed:
-000500  1  4C 10 05 54          print_string "TESTS FAILED"
-000504  1  45 53 54 53  
-000508  1  20 46 41 49  
-000529  1               fin:
-000529  1  00                   brk
-00052A  1               .endscope
-00052A  1               
-00052A  1               ;;;;; ROUTINES
-00052A  1               
-00052A  1               PRINT_TEST_ID:
-00052A  1  4C 34 05 54          print_string "TEST #"
-00052E  1  45 53 54 20  
-000532  1  23 00 85 12  
-00054D  1  A5 01                LDA TESTID
-00054F  1  20 3B 1E             JSR PRTBYT
-000552  1  20 9E 1E             JSR OUTSP
-000555  1  E6 01                INC TESTID
-000557  1  60                   RTS
-000558  1               
-000558  1               
-000558  1               OUT_STRING:
-000558  1               .proc outstring
-000558  1  A0 00                LDY #$00
-00055A  1               l1:
-00055A  1  85 12 48 98          pushall
-00055E  1  48 8A 48 A5  
-000562  1  12           
-000563  1  B1 10                LDA (POINTL),Y
-000565  1  F0 0C                BEQ exit
-000567  1  20 A0 1E             JSR OUTCH
-00056A  1  68 AA 68 A8          pullall
-00056E  1  68           
-00056F  1               
-00056F  1  C8                   INY
-000570  1               
-000570  1  4C 5A 05             JMP l1
-000573  1               exit:
-000573  1  68 AA 68 A8          pullall
-000577  1  68           
-000578  1  60                   RTS
-000579  1               .endproc
-000579  1               
-000579  1               
-000579  1               .proc run_end_test
-000579  1  85 12 48 98          pushall
-00057D  1  48 8A 48 A5  
-000581  1  12           
-000582  1  20 9E 1E             jsr OUTSP
-000585  1               
-000585  1  A5 16                lda ASTAT
-000587  1  20 3B 1E             jsr PRTBYT
-00058A  1  20 9E 1E             jsr OUTSP
-00058D  1               
-00058D  1  A5 15                lda ATIME
-00058F  1  20 3B 1E             jsr PRTBYT
-000592  1  20 9E 1E             jsr OUTSP
-000595  1               
-000595  1  68 AA 68 A8          pullall
-000599  1  68           
-00059A  1               
-00059A  1                       ; Reset the test TEST_RESULT
-00059A  1  A9 00                lda #$00
-00059C  1  85 19                sta TEST_RESULT
-00059E  1               
-00059E  1  A5 16                LDA ASTAT
-0005A0  1  C5 18                CMP ESTAT
-0005A2  1  F0 4E                BEQ testtime
-0005A4  1  4C AF 05 28          print_string "(ESTAT "
-0005A8  1  45 53 54 41  
-0005AC  1  54 20 00 8D  
-0005CA  1  A5 18                LDA ESTAT
-0005CC  1  20 3B 1E             jsr PRTBYT
-0005CF  1  4C D5 05 29          print_string ") "
-0005D3  1  20 00 8D 12  
-0005D7  1  00 48 98 48  
-0005F0  1  E6 19                inc TEST_RESULT
-0005F2  1               
-0005F2  1               testtime:
-0005F2  1  A5 15                LDA ATIME
-0005F4  1  C5 17                CMP ETIME
-0005F6  1  F0 4E                BEQ done
-0005F8  1  4C 03 06 28          print_string "(ETIME "
-0005FC  1  45 54 49 4D  
-000600  1  45 20 00 8D  
-00061E  1  A5 17                LDA ETIME
-000620  1  20 3B 1E             jsr PRTBYT
-000623  1  4C 29 06 29          print_string ") "
-000627  1  20 00 8D 12  
-00062B  1  00 48 98 48  
-000644  1               
-000644  1  E6 19                inc TEST_RESULT
-000646  1               
-000646  1               done:
-000646  1  4C 52 06 52          print_string "RESULT: "
-00064A  1  45 53 55 4C  
-00064E  1  54 3A 20 00  
-00066D  1  A5 19                LDA TEST_RESULT
-00066F  1  D0 27                BNE good
-000671  1  4C 7A 06 50          print_string "PASS "
-000675  1  41 53 53 20  
-000679  1  00 8D 12 00  
-000695  1  4C C0 06             jmp exit
-000698  1               good:
-000698  1  A9 01                lda #$01
-00069A  1  85 20                sta FINAL_RESULT
-00069C  1  4C A5 06 46          print_string "FAIL "
-0006A0  1  41 49 4C 20  
-0006A4  1  00 8D 12 00  
-0006C0  1               exit:
-0006C0  1  20 2F 1E             jsr CRLF
-0006C3  1  60                   RTS
-0006C4  1               .endproc
-0006C4  1               
-0006C4  1               ; If the Z flag is 0, then A <> NUM and BNE will branch
-0006C4  1               ; If the Z flag is 1, then A = NUM and BEQ will branch
-0006C4  1               ; If the C flag is 0, then A (unsigned) < NUM (unsigned) and BCC will branch
-0006C4  1               ; If the C flag is 1, then A (unsigned) >= NUM (unsigned) and BCS will branch
-0006C4  1               
-0006C4  1               
-0006C4  1               ; Write Timer  RS  R/W  A4   A3  A2  A1  A0
-0006C4  1               ;    1T         1    0   1  (a)   1   0   0
-0006C4  1               ;    8T         1    0   1  (a)   1   0   1
-0006C4  1               ;   64T         1    0   1  (a)   1   1   0
-0006C4  1               ; 1024T         1    0   1  (a)   1   1   1
-0006C4  1               
-0006C4  1               ; Read Timer
-0006C4  1               ;               1    1   -  (a)   1   -   1
-0006C4  1               
-0006C4  1               ; Read Interrupt Flags
-0006C4  1               ;               1    1   -    -   1   -   1
-0006C4  1               ; Write Edge Detect Control
-0006C4  1               ;               1    0   0    -   1  (b) (c)
-0006C4  1               
-0006C4  1                ; (a) A3=0 disable interrupt from timer to IRQB
-0006C4  1                ;     A3=1 to enable interrupt timer to IRQB
-0006C4  1                ; (b) A1=0 to disable interrupt from PA7 to IRCB
-0006C4  1                ;     A1=1 to enable interrupt from PA7 to IRCB
-0006C4  1                ; (c)
-0006C4  1                ; A0=0 for negative edge-detect
-0006C4  1                ; A0=1 for positive edge-detect
-0006C4  1               ; $1744 = 1011101000100 (PIN A4 is inverted on the schematic)
-0006C4  1               
+0002D1  1  AD 07 17 AC          end_test "T0001 - Starting at $00", $80, $F8
+0002D5  1  06 17 85 16  
+0002D9  1  84 15 A9 80  
+00031A  1               .endscope
+00031A  1               
+00031A  1               .scope
+00031A  1  20 4F 07             JSR PRINT_TEST_ID
+00031D  1  A9 FF                LDA #$FF
+00031F  1  8D 04 17             STA T0001
+000322  1  EA                   NOP
+000323  1  AD 07 17 AC          end_test "T0001 - BASIC COUNTDOWN", $00, $F5
+000327  1  06 17 85 16  
+00032B  1  84 15 A9 00  
+00036C  1               .endscope
+00036C  1               
+00036C  1               .scope
+00036C  1  20 4F 07             JSR PRINT_TEST_ID
+00036F  1  A9 01                LDA #$01
+000371  1  8D 04 17             STA T0001
+000374  1  EA                   NOP
+000375  1  AD 07 17 AC          end_test "T0001 - BASIC COUNTDOWN (OVERFLOW)", $80, $F7
+000379  1  06 17 85 16  
+00037D  1  84 15 A9 80  
+0003C9  1               .endscope
+0003C9  1               
+0003C9  1               .scope
+0003C9  1  20 4F 07             JSR PRINT_TEST_ID
+0003CC  1  A9 FF                LDA #$FF
+0003CE  1  8D 0C 17             STA TI0001
+0003D1  1  EA                   NOP
+0003D2  1  AD 07 17 AC          end_test "TI0001 - BASIC COUNTDOWN", $00, $F5
+0003D6  1  06 17 85 16  
+0003DA  1  84 15 A9 00  
+00041C  1               .endscope
+00041C  1               
+00041C  1               .scope
+00041C  1  20 4F 07             JSR PRINT_TEST_ID
+00041F  1  A9 01                LDA #$01
+000421  1  8D 0C 17             STA TI0001
+000424  1  EA                   NOP
+000425  1  AD 07 17 AC          end_test "TI0001 - BASIC COUNTDOWN (OVERFLOW)", $80, $F7
+000429  1  06 17 85 16  
+00042D  1  84 15 A9 80  
+00047A  1               .endscope
+00047A  1               
+00047A  1               
+00047A  1               
+00047A  1               ;;; T0008
+00047A  1               .scope
+00047A  1  20 4F 07             JSR PRINT_TEST_ID
+00047D  1  A9 FF                LDA #$FF
+00047F  1  8D 05 17             STA T0008
+000482  1  EA                   NOP
+000483  1  AD 07 17 AC          end_test "T0008 - BASIC COUNTDOWN", $00, $FD
+000487  1  06 17 85 16  
+00048B  1  84 15 A9 00  
+0004CC  1               .endscope
+0004CC  1               
+0004CC  1               
+0004CC  1               .scope
+0004CC  1  20 4F 07             JSR PRINT_TEST_ID
+0004CF  1  A9 FF                LDA #$FF
+0004D1  1  8D 0D 17             STA TI0008
+0004D4  1  EA                   NOP
+0004D5  1  AD 07 17 AC          end_test "TI0008 - BASIC COUNTDOWN", $00, $FD
+0004D9  1  06 17 85 16  
+0004DD  1  84 15 A9 00  
+00051F  1               .endscope
+00051F  1               
+00051F  1               .scope
+00051F  1  20 4F 07             JSR PRINT_TEST_ID
+000522  1  A9 01                LDA #$01
+000524  1  8D 0D 17             STA TI0008
+000527  1               
+000527  1  EA EA EA EA          .repeat 20, I
+00052B  1  EA EA EA EA  
+00052F  1  EA EA EA EA  
+00053B  1                               NOP
+00053B  1                       .endrep
+00053B  1               
+00053B  1  AD 07 17 AC          end_test "TI0008 - BASIC COUNTDOWN (OVERFLOW)", $80, $D8
+00053F  1  06 17 85 16  
+000543  1  84 15 A9 80  
+000590  1               .endscope
+000590  1               
+000590  1               
+000590  1               ;;; T0064
+000590  1               .scope
+000590  1  20 4F 07             JSR PRINT_TEST_ID
+000593  1  A9 FF                LDA #$FF
+000595  1  8D 06 17             STA T0064
+000598  1  EA                   NOP
+000599  1  AD 07 17 AC          end_test "T0064 - BASIC COUNTDOWN", $00, $FE
+00059D  1  06 17 85 16  
+0005A1  1  84 15 A9 00  
+0005E2  1               .endscope
+0005E2  1               
+0005E2  1               .scope
+0005E2  1  20 4F 07             JSR PRINT_TEST_ID
+0005E5  1  A9 01                LDA #$01
+0005E7  1  8D 06 17             STA T0064
+0005EA  1  20 E9 08             jsr long_delay
+0005ED  1  AD 07 17 AC          end_test "T0064 - BASIC COUNTDOWN (OVERFLOW)", $80, $20
+0005F1  1  06 17 85 16  
+0005F5  1  84 15 A9 80  
+000641  1               .endscope
+000641  1               
+000641  1               ;; T1024
+000641  1               .scope
+000641  1  20 4F 07             JSR PRINT_TEST_ID
+000644  1  A9 FF                LDA #$FF
+000646  1  8D 07 17             STA T1024
+000649  1  EA                   NOP
+00064A  1  AD 07 17 AC          end_test "T1024 - BASIC COUNTDOWN", $00, $FE
+00064E  1  06 17 85 16  
+000652  1  84 15 A9 00  
+000693  1               .endscope
+000693  1               
+000693  1               .scope
+000693  1  20 4F 07             JSR PRINT_TEST_ID
+000696  1  A9 01                LDA #$1
+000698  1  8D 07 17             STA T1024
+00069B  1  20 E9 08             jsr long_delay
+00069E  1  AD 07 17 AC          end_test "T1024 - BASIC COUNTDOWN  (OVERFLOW)", $80, $E0
+0006A2  1  06 17 85 16  
+0006A6  1  84 15 A9 80  
+0006F3  1               .endscope
+0006F3  1               
+0006F3  1               
+0006F3  1               .scope
+0006F3  1  A5 20                lda FINAL_RESULT
+0006F5  1  D0 2E                bne tests_passed
+0006F7  1  4C 09 07 41          print_string "ALL TESTS PASS"
+0006FB  1  4C 4C 20 54  
+0006FF  1  45 53 54 53  
+000722  1  4C 4E 07             jmp fin
+000725  1               
+000725  1               tests_passed:
+000725  1  4C 35 07 54          print_string "TESTS FAILED"
+000729  1  45 53 54 53  
+00072D  1  20 46 41 49  
+00074E  1               fin:
+00074E  1  00                   brk
+00074F  1               .endscope
+00074F  1               
+00074F  1               ;;;;; ROUTINES
+00074F  1               
+00074F  1               PRINT_TEST_ID:
+00074F  1  4C 59 07 54          print_string "TEST #"
+000753  1  45 53 54 20  
+000757  1  23 00 85 12  
+000772  1  A5 01                LDA TESTID
+000774  1  20 3B 1E             JSR PRTBYT
+000777  1  20 9E 1E             JSR OUTSP
+00077A  1  E6 01                INC TESTID
+00077C  1  60                   RTS
+00077D  1               
+00077D  1               
+00077D  1               OUT_STRING:
+00077D  1               .proc outstring
+00077D  1  A0 00                LDY #$00
+00077F  1               l1:
+00077F  1  85 12 48 98          pushall
+000783  1  48 8A 48 A5  
+000787  1  12           
+000788  1  B1 10                LDA (POINTL),Y
+00078A  1  F0 0C                BEQ exit
+00078C  1  20 A0 1E             JSR OUTCH
+00078F  1  68 AA 68 A8          pullall
+000793  1  68           
+000794  1               
+000794  1  C8                   INY
+000795  1               
+000795  1  4C 7F 07             JMP l1
+000798  1               exit:
+000798  1  68 AA 68 A8          pullall
+00079C  1  68           
+00079D  1  60                   RTS
+00079E  1               .endproc
+00079E  1               
+00079E  1               
+00079E  1               .proc run_end_test
+00079E  1  85 12 48 98          pushall
+0007A2  1  48 8A 48 A5  
+0007A6  1  12           
+0007A7  1  20 9E 1E             jsr OUTSP
+0007AA  1               
+0007AA  1  A5 16                lda ASTAT
+0007AC  1  20 3B 1E             jsr PRTBYT
+0007AF  1  20 9E 1E             jsr OUTSP
+0007B2  1               
+0007B2  1  A5 15                lda ATIME
+0007B4  1  20 3B 1E             jsr PRTBYT
+0007B7  1  20 9E 1E             jsr OUTSP
+0007BA  1               
+0007BA  1  68 AA 68 A8          pullall
+0007BE  1  68           
+0007BF  1               
+0007BF  1                       ; Reset the test TEST_RESULT
+0007BF  1  A9 00                lda #$00
+0007C1  1  85 19                sta TEST_RESULT
+0007C3  1               
+0007C3  1  A5 16                LDA ASTAT
+0007C5  1  C5 18                CMP ESTAT
+0007C7  1  F0 4E                BEQ testtime
+0007C9  1  4C D4 07 28          print_string "(ESTAT "
+0007CD  1  45 53 54 41  
+0007D1  1  54 20 00 8D  
+0007EF  1  A5 18                LDA ESTAT
+0007F1  1  20 3B 1E             jsr PRTBYT
+0007F4  1  4C FA 07 29          print_string ") "
+0007F8  1  20 00 8D 12  
+0007FC  1  00 48 98 48  
+000815  1  E6 19                inc TEST_RESULT
+000817  1               
+000817  1               testtime:
+000817  1  A5 15                LDA ATIME
+000819  1  C5 17                CMP ETIME
+00081B  1  F0 4E                BEQ done
+00081D  1  4C 28 08 28          print_string "(ETIME "
+000821  1  45 54 49 4D  
+000825  1  45 20 00 8D  
+000843  1  A5 17                LDA ETIME
+000845  1  20 3B 1E             jsr PRTBYT
+000848  1  4C 4E 08 29          print_string ") "
+00084C  1  20 00 8D 12  
+000850  1  00 48 98 48  
+000869  1               
+000869  1  E6 19                inc TEST_RESULT
+00086B  1               
+00086B  1               done:
+00086B  1  4C 77 08 52          print_string "RESULT: "
+00086F  1  45 53 55 4C  
+000873  1  54 3A 20 00  
+000892  1  A5 19                LDA TEST_RESULT
+000894  1  D0 27                BNE good
+000896  1  4C 9F 08 50          print_string "PASS "
+00089A  1  41 53 53 20  
+00089E  1  00 8D 12 00  
+0008BA  1  4C E5 08             jmp exit
+0008BD  1               good:
+0008BD  1  A9 01                lda #$01
+0008BF  1  85 20                sta FINAL_RESULT
+0008C1  1  4C CA 08 46          print_string "FAIL "
+0008C5  1  41 49 4C 20  
+0008C9  1  00 8D 12 00  
+0008E5  1               exit:
+0008E5  1  20 2F 1E             jsr CRLF
+0008E8  1  60                   RTS
+0008E9  1               .endproc
+0008E9  1               
+0008E9  1               .proc long_delay
+0008E9  1               .scope
+0008E9  1  A0 FF                LDY #$FF              ;MULTIPLY FACTOR
+0008EB  1  A2 FF        DLY1:   LDX #$FF              ;DELAY TIME
+0008ED  1  CA           DLY2:   DEX
+0008EE  1  20 F7 08             JSR dummy
+0008F1  1  D0 FA                BNE DLY2
+0008F3  1  88                   DEY
+0008F4  1  D0 F5                BNE DLY1
+0008F6  1  60                   RTS
+0008F7  1               
+0008F7  1               ; Burn cycles calling this
+0008F7  1               dummy:
+0008F7  1  60                   RTS
+0008F8  1               .endscope
+0008F8  1               .endproc
+0008F8  1               
+0008F8  1               ; If the Z flag is 0, then A <> NUM and BNE will branch
+0008F8  1               ; If the Z flag is 1, then A = NUM and BEQ will branch
+0008F8  1               ; If the C flag is 0, then A (unsigned) < NUM (unsigned) and BCC will branch
+0008F8  1               ; If the C flag is 1, then A (unsigned) >= NUM (unsigned) and BCS will branch
+0008F8  1               
+0008F8  1               
+0008F8  1               ; Write Timer  RS  R/W  A4   A3  A2  A1  A0
+0008F8  1               ;    1T         1    0   1  (a)   1   0   0
+0008F8  1               ;    8T         1    0   1  (a)   1   0   1
+0008F8  1               ;   64T         1    0   1  (a)   1   1   0
+0008F8  1               ; 1024T         1    0   1  (a)   1   1   1
+0008F8  1               
+0008F8  1               ; Read Timer
+0008F8  1               ;               1    1   -  (a)   1   -   1
+0008F8  1               
+0008F8  1               ; Read Interrupt Flags
+0008F8  1               ;               1    1   -    -   1   -   1
+0008F8  1               ; Write Edge Detect Control
+0008F8  1               ;               1    0   0    -   1  (b) (c)
+0008F8  1               
+0008F8  1                ; (a) A3=0 disable interrupt from timer to IRQB
+0008F8  1                ;     A3=1 to enable interrupt timer to IRQB
+0008F8  1                ; (b) A1=0 to disable interrupt from PA7 to IRCB
+0008F8  1                ;     A1=1 to enable interrupt from PA7 to IRCB
+0008F8  1                ; (c)
+0008F8  1                ; A0=0 for negative edge-detect
+0008F8  1                ; A0=1 for positive edge-detect
+0008F8  1               ; $1744 = 1011101000100 (PIN A4 is inverted on the schematic)
+0008F8  1               
