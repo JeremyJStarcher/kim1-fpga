@@ -8,7 +8,9 @@ ATIME = $15 ; Actual time
 ASTAT = $16 ; Actual status
 ETIME = $17 ; Expected time
 ESTAT = $18 ; Expected status
-RESULT = $19;
+TEST_RESULT = $19;
+FINAL_RESULT = $20;
+
 
         .ORG $0200
 
@@ -119,6 +121,7 @@ skip:
 
         LDA #$00
         STA TESTID
+        STA FINAL_RESULT
 
 ;;;;;;;;;;;; TESTS START HERE
 
@@ -173,8 +176,17 @@ skip:
         end_test "TI0008 - BASIC COUNTDOWN", $00, $FD
 .endscope
 
+.scope
+        lda FINAL_RESULT
+        bne tests_passed
+        print_string "ALL TESTS PASS"
+        jmp fin
 
- BRK
+tests_passed:
+        print_string "TESTS FAILED"
+fin:
+        brk
+.endscope
 
 ;;;;; ROUTINES
 
@@ -220,9 +232,9 @@ exit:
 
         pullall
 
-        ; Reset the test result
+        ; Reset the test TEST_RESULT
         lda #$00
-        sta RESULT
+        sta TEST_RESULT
 
         LDA ASTAT
         CMP ESTAT
@@ -231,7 +243,7 @@ exit:
         LDA ESTAT
         jsr PRTBYT
         print_string ") "
-        inc RESULT
+        inc TEST_RESULT
 
 testtime:
         LDA ATIME
@@ -242,12 +254,19 @@ testtime:
         jsr PRTBYT
         print_string ") "
 
-        inc RESULT
+        inc TEST_RESULT
 
 done:
         print_string "RESULT: "
-        LDA RESULT
-        jsr PRTBYT
+        LDA TEST_RESULT
+        BNE good
+        print_string "PASS "
+        jmp exit
+good:
+        lda #$01
+        sta FINAL_RESULT
+        print_string "FAIL "
+exit:
         jsr CRLF
         RTS
 .endproc
