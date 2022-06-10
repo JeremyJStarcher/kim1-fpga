@@ -10,7 +10,8 @@ all: $(PROGRAM).ptp ${PROGRAM}.ptp ${RESET}.ptp
 	unix2dos *.ptp
 	cp *.ptp ${DEST}
 	cp *.hex ${DEST}
-
+	(cd js; node makeram.js)
+	
 $(PROGRAM).ptp: $(PROGRAM).bin Makefile
 	ca65 -g -l $(PROGRAM).lst $(PROGRAM).s
 	ld65 -t none -vm -m $(PROGRAM).map -o $(PROGRAM).bin $(PROGRAM).o
