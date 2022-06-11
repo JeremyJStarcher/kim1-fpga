@@ -31,6 +31,10 @@ module KIM_DUELOGIC_PRO (
     output AUDIOO,
     input  AUDIOI,
 
+	 output SPI_DO,
+	 output SPI_CLK,
+	 output SPI_CS,
+	 
     output [2:0] LED,
     input        KEY
 
@@ -52,13 +56,13 @@ module KIM_DUELOGIC_PRO (
 //    end else clkcount <= clkcount + 5'd1;
 //  end
 
-  logic [7:0] clkcount = 8'h0;
+  logic [13:0] clkcount = 13'h0;
   logic       clk = 1'b0;
   always @(posedge CLK_66) begin
-    if (clkcount == 8'd32) begin
-      clkcount <= 8'd0;
+    if (clkcount == 13'b1_1111__1111_1111) begin
+      clkcount <= 13'd0;
       clk <= ~clk;
-    end else clkcount <= clkcount + 8'd1;
+    end else clkcount <= clkcount + 13'd1;
   end
 
   KIM_1 TOP (
@@ -80,6 +84,33 @@ module KIM_DUELOGIC_PRO (
   );
 
   logic [7:0] K;
+
+  logic [31:0] MAX_DISPLAY = 31'h01234567;
+    always @(posedge CLK_66) begin
+      MAX_DISPLAY = MAX_DISPLAY + 1'b1;
+    end
+
+//  M7219 M (
+//      .clk(CLK_66),
+ //     .parallel(MAX_DISPLAY),
+  //    .clk_out(SPI_CLK),
+ //     .data_out(SPI_DO),
+ //     .load(SPI_CS)
+ // );
+  
+  MAX7219 M (
+        .clk(clk),
+        .reset_n(KEY),
+        .data_vector(MAX_DISPLAY),
+        .clk_out(SPI_CLK),
+        .data_out(SPI_DO),
+        .load_out(SPI_CS)
+    );
+	 
+
+defparam M.devices=1;
+// defparam M.intensity =  integer [7];
+    
 
 
   /*
