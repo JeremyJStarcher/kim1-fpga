@@ -96,9 +96,9 @@ module KIM_DUELOGIC_PRO (
 
   logic [7:0] K;
 
-  logic [31:0] MAX_DISPLAY = 31'h01234567;
+  logic [63:0] MAX_DISPLAY = 31'h01234567;
     always @(posedge CLK_66) begin
-      MAX_DISPLAY = MAX_DISPLAY + 13;
+      MAX_DISPLAY = MAX_DISPLAY + 1;
     end
   
   MAX7219 M (
@@ -111,7 +111,7 @@ module KIM_DUELOGIC_PRO (
     );
 	 
 
-defparam M.devices=1;
+defparam M.devices=2;
 // defparam M.intensity =  integer [7];
     
 
