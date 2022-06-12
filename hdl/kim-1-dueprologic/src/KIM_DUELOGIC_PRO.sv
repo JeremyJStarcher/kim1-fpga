@@ -56,13 +56,24 @@ module KIM_DUELOGIC_PRO (
 //    end else clkcount <= clkcount + 5'd1;
 //  end
 
-  logic [13:0] clkcount = 13'h0;
+
+  logic [7:0] clkcount = 8'h0;
   logic       clk = 1'b0;
   always @(posedge CLK_66) begin
-    if (clkcount == 13'b1_1111__1111_1111) begin
-      clkcount <= 13'd0;
+    if (clkcount == 8'd32) begin
+      clkcount <= 8'd0;
       clk <= ~clk;
-    end else clkcount <= clkcount + 13'd1;
+    end else begin
+      clkcount <= clkcount + 8'd1;
+    end
+  end
+
+
+
+  logic reset = 1'b0;
+
+  always_comb begin
+    reset = ~KEY || ~RS_KEY;
   end
 
   KIM_1 TOP (
@@ -75,7 +86,7 @@ module KIM_DUELOGIC_PRO (
       .DI(),
       .AB(),
       .WE(),
-      .reset(~KEY || ~RS_KEY),
+      .reset(reset),
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
@@ -87,20 +98,12 @@ module KIM_DUELOGIC_PRO (
 
   logic [31:0] MAX_DISPLAY = 31'h01234567;
     always @(posedge CLK_66) begin
-      MAX_DISPLAY = MAX_DISPLAY + 1'b1;
+      MAX_DISPLAY = MAX_DISPLAY + 13;
     end
-
-//  M7219 M (
-//      .clk(CLK_66),
- //     .parallel(MAX_DISPLAY),
-  //    .clk_out(SPI_CLK),
- //     .data_out(SPI_DO),
- //     .load(SPI_CS)
- // );
   
   MAX7219 M (
         .clk(clk),
-        .reset_n(KEY),
+        .reset_n(~reset),
         .data_vector(MAX_DISPLAY),
         .clk_out(SPI_CLK),
         .data_out(SPI_DO),
