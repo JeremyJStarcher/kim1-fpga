@@ -11,7 +11,7 @@
 module KIM_DUELOGIC_PRO (
     // input clk50,
 	 input CLK_66,
-	 
+	
     inout [7:0] PA,
     inout [7:0] PB,
 
@@ -34,7 +34,7 @@ module KIM_DUELOGIC_PRO (
 	 output SPI_DO,
 	 output SPI_CLK,
 	 output SPI_CS,
-	 
+	
     output [2:0] LED,
     input        KEY
 
@@ -76,6 +76,8 @@ module KIM_DUELOGIC_PRO (
     reset = ~KEY || ~RS_KEY;
   end
 
+  logic [15:0] PC_D;     // Debug program counter
+
   KIM_1 TOP (
       .PAI(PA),
       .PBI(PB),
@@ -91,16 +93,23 @@ module KIM_DUELOGIC_PRO (
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
       .clk(clk),
+
+      .PC_D(PC_D),
       .*
   );
 
   logic [7:0] K;
 
-  logic [63:0] MAX_DISPLAY = 31'h01234567;
-    always @(posedge CLK_66) begin
-      MAX_DISPLAY = MAX_DISPLAY + 1;
-    end
-  
+  logic [63:0] MAX_DISPLAY = 63'h01234567;
+  always @(posedge CLK_66) begin
+  //  MAX_DISPLAY = PC_D;
+  end
+
+
+  always_comb begin
+    MAX_DISPLAY = PC_D;
+  end
+
   MAX7219 M (
         .clk(clk),
         .reset_n(~reset),
@@ -109,11 +118,11 @@ module KIM_DUELOGIC_PRO (
         .data_out(SPI_DO),
         .load_out(SPI_CS)
     );
-	 
+	
 
 defparam M.devices=2;
 // defparam M.intensity =  integer [7];
-    
+
 
 
   /*

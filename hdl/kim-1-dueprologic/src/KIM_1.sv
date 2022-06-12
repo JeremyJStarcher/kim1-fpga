@@ -3,44 +3,46 @@
  *
  * Stephen A. Edwards
  * sedwards@cs.columbia.edu
- * 
+ *
  *
  * Memory Map:
- * 
+ *
  * 0000 - 03FF RAM (1K)
  * 1700 - 173F 6530-003 registers  (application connector)
  * 1740 - 177F 6530-002 registers  (keyboard, LEDs, TTY, cassette)
  * 1780 - 17FF RAM (128 bytes, 6530s)
  * 1800 - 1FFF ROM (2K)     1800-1BFF 6530-003  1C00-1FFF 6530-002
- * 
+ *
  * 6530 registers
- * 
+ *
  * 0,8 A Data             R/W
  * 1,9 A Data Direction   R/W
  * 2,A B Data             R/W
  * 3,B B Data Direction   R/W
- * 
+ *
  * 4  Timer /1            W
  * 5  Timer /8            W
  * 6  Timer /64           W
  * 7  Timer /1024         W
  *
- * 4,6 Timer value        R 
+ * 4,6 Timer value        R
  * 5,7,D,F Interrupt flag R
- * 
+ *
  * C  Timer /1 + Int      W
  * D  Timer /8 + Int      W
  * E  Timer /64 + Int     W
  * F  Timer /1024 + Int   W
  *
  * C,E Timer value + Int  R
- * 
+ *
  * 1740 : Keyboard columns/LED segments
  * 1742 : Keyboard row/LED digits
- * 
+ *
  */
 
 module KIM_1 (
+    output [15:0] PC_D,     // Debug program counter
+
     input         clk,
     input         reset,
     input         NMI,
@@ -76,7 +78,7 @@ module KIM_1 (
     output AUDIOO,
 
     output [2:0] LED,
-	 
+	
 	 input	SST_SWITCH // Single step - active low
 );
 
@@ -91,12 +93,12 @@ module KIM_1 (
   logic [7:0] RIOT002_PBO;
   logic [7:0] RIOT002_PBI;
   logic [7:0] RIOT002_PBOE;
-  
+
   assign RDY     = 1;
 
   assign LED_SEG = ~RIOT002_PAO[6:0];
-  
-  
+
+
   mcs6502 U1 (
       .clk(clk),
       .reset(reset),
@@ -106,7 +108,8 @@ module KIM_1 (
       .WE(WE),
       .IRQ(1'b0),
       .NMI(NMI),
-      .RDY(RDY)
+      .RDY(RDY),
+      .PC_D(PC_D)
   );
 
   mcs6530 #( 16'h1740 )  // Base of IO & Timer
@@ -145,16 +148,16 @@ module KIM_1 (
       .PBOE(PBOE)
   );
 
-  // U4, a '145 four-to-ten decoder with active-low outputs   
+  // U4, a '145 four-to-ten decoder with active-low outputs
   //
   // This divides the memory space into 8 1K regions
-  // K0 0000-03FF  1K RAM	     
-  // K1 0400-07FF		     
-  // K2 0800-0BFF		     
-  // K3 0C00-0FFF		     
-  // K4 1000-13FF		     
+  // K0 0000-03FF  1K RAM	
+  // K1 0400-07FF		
+  // K2 0800-0BFF		
+  // K3 0C00-0FFF		
+  // K4 1000-13FF		
   // K5 1400-17FF  6530 Registers/RAM
-  // K6 1800-1BFF  6530-003 ROM	     
+  // K6 1800-1BFF  6530-003 ROM	
   // K7 1C00-1FFF  6530-002 ROM
   logic [9:0] u4out;
   SN74145 U4 (
@@ -273,7 +276,7 @@ module SN74145 (
     output [9:0] out
 );
   always_comb
-  
+
     case (select)
       4'd0:    out = 10'b11_1111_1110;
       4'd1:    out = 10'b11_1111_1101;
