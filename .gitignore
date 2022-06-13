@@ -13,10 +13,14 @@ hdl/kim-1-dueprologic/Kim_Frame_Top/output_files/
 hdl/dueprologic-blinky/
 
 board/kim-ep2c5/kim-ep2c5-backups/
-board/io-panel/io-panel-backups/
-
+board/due-pro-logic/full-board
+board/due-pro-logic/io-interface
+board/due-pro-logic/top-shield
 board/kim1-earthpeople/kim1-earthpeople-backups
 board/kim1-earthpeople/_autosave-kim1-earthpeople.kicad_pcb
+
+board/io-panel/io-panel-backups/
+
 /**/*.pof
 /**/*.sof
 /**/*.qws
