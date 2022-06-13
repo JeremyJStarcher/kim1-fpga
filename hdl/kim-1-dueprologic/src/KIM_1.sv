@@ -78,7 +78,7 @@ module KIM_1 (
     output AUDIOO,
 
     output [2:0] LED,
-	
+
 	 input	SST_SWITCH // Single step - active low
 );
 
@@ -151,13 +151,13 @@ module KIM_1 (
   // U4, a '145 four-to-ten decoder with active-low outputs
   //
   // This divides the memory space into 8 1K regions
-  // K0 0000-03FF  1K RAM	
-  // K1 0400-07FF		
-  // K2 0800-0BFF		
-  // K3 0C00-0FFF		
-  // K4 1000-13FF		
+  // K0 0000-03FF  1K RAM
+  // K1 0400-07FF
+  // K2 0800-0BFF
+  // K3 0C00-0FFF
+  // K4 1000-13FF
   // K5 1400-17FF  6530 Registers/RAM
-  // K6 1800-1BFF  6530-003 ROM	
+  // K6 1800-1BFF  6530-003 ROM
   // K7 1C00-1FFF  6530-002 ROM
   logic [9:0] u4out;
   SN74145 U4 (
