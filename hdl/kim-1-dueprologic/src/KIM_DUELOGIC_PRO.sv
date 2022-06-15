@@ -57,25 +57,35 @@ module KIM_DUELOGIC_PRO (
 //  end
 
 
-  logic [7:0] clk_1_count = 8'h0;
+  logic [7:0] clkcount = 8'h0;
+  logic       clk = 1'b0;
+  always @(posedge CLK_66) begin
+    if (clkcount == 8'd32) begin
+      clkcount <= 8'd0;
+      clk <= ~clk;
+    end else clkcount <= clkcount + 8'd1;
+  end
+
+
+  logic [15:0] clk_1_count = 16'h0;
   logic       clk_1 = 1'b0;
   always @(posedge CLK_66) begin
-    if (clk_1_count == 8'd32) begin
-      clk_1_count <= 8'd0;
+    if (clk_1_count == 16'd32) begin
+      clk_1_count <= 16'd0;
       clk_1 <= ~clk_1;
     end else begin
-      clk_1_count <= clk_1_count + 8'd1;
+      clk_1_count <= clk_1_count + 16'd1;
     end
   end
 
-  logic [15:0] clk_s_count = 16'h0;
-  logic clk_s = 1'b0;
+  logic [32:0] clk_s_count = 33'h0;
+  logic       clk_s = 1'b0;
   always @(posedge CLK_66) begin
-    if (clk_s_count == 16'd65535) begin
-      clk_s_count <= 16'd0;
-      clk_s <= ~clk_1;
+    if (clk_s_count == 32'd54740991) begin
+      clk_s_count <= 32'd0;
+      clk_s <= ~clk_s;
     end else begin
-      clk_s_count <= clk_s_count + 16'd1;
+      clk_s_count <= clk_s_count + 32'd1;
     end
   end
 
@@ -102,8 +112,7 @@ module KIM_DUELOGIC_PRO (
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
-      .clk(clk_1),
-
+      .clk(clk_s),
       .PC_D(PC_D),
       .*
   );
