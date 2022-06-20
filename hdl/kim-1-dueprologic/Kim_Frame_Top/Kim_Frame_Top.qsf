@@ -97,8 +97,8 @@ set_location_assignment PIN_104 -to RS_KEY
 set_location_assignment PIN_101 -to ENABLE_TTY
 
 set_location_assignment PIN_65 -to KB_ROW[0]
-set_location_assignment PIN_58 -to KB_ROW[2]
-set_location_assignment PIN_99 -to KB_ROW[1]
+set_location_assignment PIN_58 -to KB_ROW[1]
+set_location_assignment PIN_99 -to KB_ROW[2]
 # set_location_assignment PIN_99 -to KB_ROW[3]
 
 
