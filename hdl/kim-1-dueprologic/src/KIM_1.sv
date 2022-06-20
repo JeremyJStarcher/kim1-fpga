@@ -184,7 +184,8 @@ module KIM_1 (
 
   // U5-U14: 1K Static RAM
 
-  logic [7:0] RAM1K                              [0:1024];
+  logic [7:0] RAM1K                              [0:1023];
+  initial $readmemh("ram.hex", RAM1K);  // Load the ROM from a file
   logic [7:0] RAM1K_DO;  // Read data from 1K RAM
   logic       RAM1K_OE;  // Data from the 1K RAM
 

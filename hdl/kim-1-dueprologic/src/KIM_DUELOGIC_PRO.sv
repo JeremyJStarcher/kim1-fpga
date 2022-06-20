@@ -20,7 +20,7 @@ module KIM_DUELOGIC_PRO (
     output [9:4] LED_DIG,  // Active low: 4 is leftmost
     output [6:0] LED_SEG,  // Active low: 0 is segment A
 
-	 input SST_SWITCH, // Active low
+    input SST_SWITCH, // Active low
     input ST_KEY,  // Active low
     input RS_KEY,  // Active low
 
@@ -31,13 +31,15 @@ module KIM_DUELOGIC_PRO (
     output AUDIOO,
     input  AUDIOI,
 
-	 output SPI_DO,
-	 output SPI_CLK,
-	 output SPI_CS,
-	
+	  output SPI_DO,
+    output SPI_CLK,
+	  output SPI_CS,
+
+    output UART_TXD,
+    input UART_RXD,
+
     output [2:0] LED,
     input        KEY
-
 );
 
   /*
@@ -81,7 +83,7 @@ module KIM_DUELOGIC_PRO (
   logic [32:0] clk_s_count = 33'h0;
   logic       clk_s = 1'b0;
   always @(posedge CLK_66) begin
-    if (clk_s_count == 32'd54740991) begin
+    if (clk_s_count == 32'd10000) begin
       clk_s_count <= 32'd0;
       clk_s <= ~clk_s;
     end else begin
@@ -90,6 +92,7 @@ module KIM_DUELOGIC_PRO (
   end
 
 
+  // Normally low. Goes HIGH in reset condition
   logic reset = 1'b0;
 
   always_comb begin
@@ -141,6 +144,41 @@ module KIM_DUELOGIC_PRO (
 
 defparam M.devices=2;
 // defparam M.intensity =  integer [7];
+
+  always @(posedge CLK_66) begin
+    tx_byte = 97;
+    transmit = 0;
+    if (!is_transmitting) begin
+      transmit = 1;
+    end else begin
+      transmit = 0;
+    end
+  end
+
+
+  logic transmit; // Signal to transmit
+  logic [7:0] tx_byte; // Byte to transmit
+  logic received; // Indicated that a byte has been received.
+  logic [7:0] rx_byte; // Byte received
+  logic is_receiving; // Low when receive line is idle.
+  logic is_transmitting; // Low when transmit line is idle.
+  logic recv_error; // Indicates error in receiving packet.
+
+
+  uart U1 (
+    .clk(CLK_66),
+    .rst(reset),
+    .rx(UART_RXD),
+    .tx(UART_TXD),
+    .transmit(transmit),
+    .tx_byte(tx_byte),
+    .received(received),
+    .rx_byte(rx_byte),
+    .is_receiving(is_receiving),
+    .is_transmitting(is_transmitting),
+    .recv_error(recv_error)
+  );
+
 
 
 
