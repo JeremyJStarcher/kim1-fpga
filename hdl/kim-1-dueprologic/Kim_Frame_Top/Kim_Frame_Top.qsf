@@ -96,6 +96,9 @@ set_location_assignment PIN_106 -to ST_KEY
 set_location_assignment PIN_104 -to RS_KEY
 set_location_assignment PIN_101 -to ENABLE_TTY
 
+set_location_assignment PIN_110 -to MEM_KEY
+
+
 set_location_assignment PIN_65 -to KB_ROW[0]
 set_location_assignment PIN_58 -to KB_ROW[1]
 set_location_assignment PIN_99 -to KB_ROW[2]
@@ -140,6 +143,8 @@ set_location_assignment PIN_129 -to SPI_CLK
 set_location_assignment PIN_120 -to UART_TXD
 set_location_assignment PIN_119 -to UART_RXD
 
+set_location_assignment PIN_50 -to EXT_CLOCK
+
 # set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KEY
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[0]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to KB_COL[1]
@@ -152,6 +157,7 @@ set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to RS_KEY
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ST_KEY
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to SST_KEY
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to ENABLE_TTY
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to MEM_KEY
 
 
 

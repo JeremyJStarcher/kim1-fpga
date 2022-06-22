@@ -38,6 +38,9 @@ module KIM_DUELOGIC_PRO (
     output UART_TXD,
     input UART_RXD,
 
+    output EXT_CLOCK,
+    input MEM_KEY,
+
     output [2:0] LED,
     input        KEY
 );
@@ -60,7 +63,7 @@ module KIM_DUELOGIC_PRO (
 
 
   logic [7:0] clkcount = 8'h0;
-  logic       clk = 1'b0;
+  logic clk = 1'b0;
   always @(posedge CLK_66) begin
     if (clkcount == 8'd32) begin
       clkcount <= 8'd0;
@@ -70,7 +73,7 @@ module KIM_DUELOGIC_PRO (
 
 
   logic [15:0] clk_1_count = 16'h0;
-  logic       clk_1 = 1'b0;
+  logic clk_1 = 1'b0;
   always @(posedge CLK_66) begin
     if (clk_1_count == 16'd32) begin
       clk_1_count <= 16'd0;
@@ -81,9 +84,9 @@ module KIM_DUELOGIC_PRO (
   end
 
   logic [32:0] clk_s_count = 33'h0;
-  logic       clk_s = 1'b0;
+  logic clk_s = 1'b0;
   always @(posedge CLK_66) begin
-    if (clk_s_count == 32'd10000) begin
+    if (clk_s_count == 32'd1000000) begin
       clk_s_count <= 32'd0;
       clk_s <= ~clk_s;
     end else begin
@@ -95,11 +98,29 @@ module KIM_DUELOGIC_PRO (
   // Normally low. Goes HIGH in reset condition
   logic reset = 1'b0;
 
-  always_comb begin
-    reset = ~KEY || ~RS_KEY;
+  logic curr_clock = 1'b0;
+  logic clk_flag = 1'b0;
+  logic[15:0]  trigger = 16'h0200;
+
+	always_comb begin
+		reset = ~KEY || ~RS_KEY;
+	end
+
+  always_ff begin
+   if (PC_D == trigger) begin
+      clk_flag = 1'b1;
+    end
+
+    // Should use clk_flag here.
+    if (MEM_KEY) begin
+      curr_clock = clk_s;
+    end else begin
+      curr_clock = clk_1;
+    end
   end
 
   logic [15:0] PC_D;     // Debug program counter
+  logic [15:0] PC_D_LAST;     // Debug program counter
 
   KIM_1 TOP (
       .PAI(PA),
@@ -115,7 +136,7 @@ module KIM_DUELOGIC_PRO (
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
       .KB_ROW(KB_ROW_int),
-      .clk(clk_s),
+      .clk(curr_clock),
       .PC_D(PC_D),
       .*
   );
@@ -145,16 +166,60 @@ module KIM_DUELOGIC_PRO (
 defparam M.devices=2;
 // defparam M.intensity =  integer [7];
 
-  always @(posedge CLK_66) begin
-    tx_byte = 97;
-    transmit = 0;
-    if (!is_transmitting) begin
-      transmit = 1;
-    end else begin
-      transmit = 0;
+  assign EXT_CLOCK = clock_foo;
+
+
+
+  always @(posedge clk_1) begin
+    if (reset) begin
+      debug_state = DEBUG_STATE_IDLE;
+      clock_foo = 0;
     end
+
+    if (PC_D_LAST != PC_D && !is_transmitting) begin
+      PC_D_LAST <= PC_D;
+      debug_state = DEBUG_STATE_NIBBLE0;
+    end
+
+    if (is_transmitting) begin
+      transmit = 0;
+    end else begin
+
+      case (debug_state)
+        DEBUG_STATE_IDLE: begin
+        end
+
+        DEBUG_STATE_NIBBLE0: begin
+          tx_byte = PC_D[7:0];
+          // tx_byte = 255;
+          transmit = 1;
+          debug_state = DEBUG_STATE_NIBBLE1;
+        end
+
+        DEBUG_STATE_NIBBLE1: begin
+          tx_byte = PC_D[15:8];
+          // tx_byte = 127;
+          transmit = 1;
+          debug_state = DEBUG_STATE_IDLE;
+          clock_foo = ~clock_foo;
+        end
+
+      endcase
+    end
+
   end
 
+  logic clock_foo = 1'b0;
+
+  reg [8:0] debug_state = DEBUG_STATE_IDLE;
+
+  parameter DEBUG_STATE_IDLE = 0;
+  
+  parameter DEBUG_STATE_NIBBLE0 = 1;
+  parameter DEBUG_STATE_NIBBLE1 = 2;
+  parameter DEBUG_STATE_NIBBLE2 = 3;
+  parameter DEBUG_STATE_NIBBLE3 = 4;
+  parameter DEBUG_STATE_CR = 5;
 
   logic transmit; // Signal to transmit
   logic [7:0] tx_byte; // Byte to transmit

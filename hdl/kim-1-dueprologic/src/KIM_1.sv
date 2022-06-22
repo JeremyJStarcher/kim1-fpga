@@ -218,6 +218,8 @@ module KIM_1 (
   // ---K KK11 1aaa aaaa
 
   logic [7:0] RAM128    [0:127];
+  initial $readmemh("ram128.hex", RAM128);  // Load the ROM from a file
+
   logic [7:0] RAM128_DO;
   logic       RAM128_OE;
 

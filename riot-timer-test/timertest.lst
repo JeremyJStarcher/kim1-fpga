@@ -19,34 +19,6 @@ Current file: timertest.s
 000000r 1                       .ORG $0200
 000200  1               
 000200  1               
-000200  1               ; The 'USER' timers
-000200  1               T0001 = $1704
-000200  1               T0008 = $1705
-000200  1               T0064 = $1706
-000200  1               T1024 = $1707
-000200  1               TSTATUS = $1707
-000200  1               TREAD_TIME = $1706
-000200  1               
-000200  1               ; The 'SYSTEM' timers
-000200  1               ;T0001 = $1744
-000200  1               ;T0008 = $1745
-000200  1               ;T0064 = $1746
-000200  1               ;T1024 = $1747
-000200  1               
-000200  1               TI0001 = T0001 +8
-000200  1               TI0008 = T0008 +8
-000200  1               TI0064 = T0064 +8
-000200  1               TI1024 = T1024 +8
-000200  1               
-000200  1               
-000200  1               ;TSTATUS = $1747
-000200  1               ;TREAD_TIME = $1746
-000200  1               
-000200  1               SAD = $1740 ; character to output
-000200  1               SBD = $1742 ; segment to output data
-000200  1               PADD = $1741 ; 6530 RIOT data direction
-000200  1               
-000200  1               
 000200  1               ; ROM ROUTINES
 000200  1               OUTCH = $1EA0
 000200  1               PRTBYT = $1E3B ; byte in A register
@@ -55,81 +27,29 @@ Current file: timertest.s
 000200  1               GETKEY = $1F6A
 000200  1               START  = $1C4F
 000200  1               
-000200  1               .macro pushall
-000200  1                       ; non-destructive push-all to boot
-000200  1                       sta TMPA
-000200  1               
-000200  1                       PHA
-000200  1                       TYA
-000200  1                       PHA
-000200  1                       TXA
-000200  1                       PHA
-000200  1               
-000200  1                       lda TMPA
-000200  1               .endmacro
-000200  1               
-000200  1               .macro pullall
-000200  1                       PLA
-000200  1                       TAX
-000200  1                       PLA
-000200  1                       TAY
-000200  1                       PLA
-000200  1               .endmacro
-000200  1               
-000200  1               .macro end_test  arg1, arg2, arg3
-000200  1               .scope
-000200  1                       LDA TSTATUS
-000200  1                       LDY TREAD_TIME
-000200  1               
-000200  1                       STA ASTAT
-000200  1                       STY ATIME
-000200  1               
-000200  1                       LDA #arg2
-000200  1                       STA ESTAT
-000200  1                       LDA #arg3
-000200  1                       STA ETIME
-000200  1               
-000200  1                       print_string arg1
-000200  1                       JSR run_end_test
-000200  1               .endscope
-000200  1               .endmacro
-000200  1               
-000200  1               .macro print_string text
-000200  1               .endmacro
-000200  1               
-000200  1               .macro print_string2 text
-000200  1               .scope
-000200  1                       jmp skip
-000200  1               l:
-000200  1                       .byte text
-000200  1                       .byte 0
-000200  1               skip:
-000200  1                       pushall
-000200  1                       LDA #<l
-000200  1                       STA POINTL;
-000200  1                       LDA #>l
-000200  1                       STA POINTH
-000200  1                       JSR OUT_STRING
-000200  1                       pullall
-000200  1               .endscope
-000200  1               .endmacro
-000200  1               
 000200  1               ;;;;;;;;;;;;;;;;;;; MAIN ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 000200  1               
-000200  1  20 2F 1E             JSR CRLF
-000203  1  20 2F 1E             JSR CRLF
-000206  1               
-000206  1  20 2F 1E             JSR CRLF
-000209  1  20 2F 1E             JSR CRLF
-00020C  1  20 2F 1E             JSR CRLF
-00020F  1  20 2F 1E             JSR CRLF
-000212  1               
-000212  1  A9 00                LDA #$00
-000214  1  85 01                STA TESTID
-000216  1  85 20                STA FINAL_RESULT
-000218  1               
-000218  1               ;;;;;;;;;;;; TESTS START HERE
-000218  1               
-000218  1               
-000218  1  4C 4F 1C             JMP START
-000218  1               
+000200  1  EA                   nop
+000201  1  EA           	nop
+000202  1  EA           	nop
+000203  1               
+000203  1  A9 FE        	LDA #$FE
+000205  1  85 01                STA TESTID
+000207  1               
+000207  1  20 2F 1E             JSR CRLF
+00020A  1  20 2F 1E             JSR CRLF
+00020D  1               
+00020D  1               ;        JSR CRLF
+00020D  1               ;        JSR CRLF
+00020D  1               ;        JSR CRLF
+00020D  1               ;        JSR CRLF
+00020D  1               
+00020D  1               ;        LDA #$00
+00020D  1               ;        STA TESTID
+00020D  1               ;        STA FINAL_RESULT
+00020D  1               
+00020D  1               ;;;;;;;;;;;; TESTS START HERE
+00020D  1               
+00020D  1               
+00020D  1  4C 4F 1C             JMP START
+00020D  1               

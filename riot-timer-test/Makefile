@@ -2,14 +2,14 @@ romdest=./rom
 
 PROGRAM=timertest
 RESET=reset
-DEST=/tmp/guessword
+DEST=./ptp
 
 all: $(PROGRAM).ptp ${PROGRAM}.ptp ${RESET}.ptp
 	rm -rf ${DEST}
 	mkdir ${DEST}
 	unix2dos *.ptp
 	cp *.ptp ${DEST}
-	cp *.hex ${DEST}
+	# cp *.hex ${DEST}
 	(cd js; node makeram.js)
 	
 $(PROGRAM).ptp: $(PROGRAM).bin Makefile
