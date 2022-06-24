@@ -30,11 +30,11 @@ bytes.forEach((b,i) => {
 array[0x00F1] = "00";
 
 // Preset program counter
-array[0x00EF] = "00";
-array[0x00F0] = "02";
+// array[0x00EF] = "00";
+// array[0x00F0] = "02";
 
 
-array[0x0000] = "AA";
+array[0x0000] = "AB";
 
 /*
 00EF = PCL
