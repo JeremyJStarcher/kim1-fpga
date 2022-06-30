@@ -180,7 +180,13 @@ module KIM_1 (
     else if (ROM2K_OE) DI = ROM2K_DO;
     else if (RIOT002_OE) DI = RIOT002_DO;
     else if (RIOT003_OE) DI = RIOT003_DO;
-    else DI = 8'bx;
+    // else DI = 8'bx;
+    // Ghosts in the data were sometimes echoing the last value 
+    // of DI, which resulted in the memory test (first book of KIM)
+    // to return extra bytes of RAM.
+    //
+    // So hard code in a value instead.
+    else DI = 8'10100101;
 
   // U5-U14: 1K Static RAM
 
