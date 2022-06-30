@@ -117,12 +117,12 @@ module KIM_DUELOGIC_PRO (
       .PAI(PA),
       .PBI(PB),
       .DECODE_ENABLE(1'b0),
-      .RDY(),
+      .RDY(RDY),
       .K(K),
-      .DO(),
-      .DI(),
-      .AB(),
-      .WE(),
+      .DO(DO),
+      .DI(DI),
+      .AB(AB),
+      .WE(WE),
       .reset(reset),
       .NMI(~ST_KEY),
       .ENABLE_TTY(~ENABLE_TTY),
@@ -133,6 +133,13 @@ module KIM_DUELOGIC_PRO (
   );
 
   logic [7:0] K;
+
+  // Added by JJS to try to debug things
+  logic RDY;
+  logic [7:0] DI;
+  logic [7:0] DO;
+  logic [15:0] AB;
+  logic WE;
 
   logic [63:0] MAX_DISPLAY = 63'h01234567;
   always @(posedge CLK_66) begin
