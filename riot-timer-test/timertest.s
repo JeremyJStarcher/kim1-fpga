@@ -30,15 +30,18 @@ START  = $1C4F
 	nop
 
 	LDA #$FE
-        STA TESTID
+        STA $00
+
+        LDA #$FA 
+        STA $01
+
+         JSR CRLF
+         JSR CRLF
 
         JSR CRLF
         JSR CRLF
-
-;        JSR CRLF
-;        JSR CRLF
-;        JSR CRLF
-;        JSR CRLF
+        JSR CRLF
+        JSR CRLF
 
 ;        LDA #$00
 ;        STA TESTID

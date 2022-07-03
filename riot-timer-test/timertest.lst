@@ -34,22 +34,25 @@ Current file: timertest.s
 000202  1  EA           	nop
 000203  1               
 000203  1  A9 FE        	LDA #$FE
-000205  1  85 01                STA TESTID
+000205  1  85 00                STA $00
 000207  1               
-000207  1  20 2F 1E             JSR CRLF
-00020A  1  20 2F 1E             JSR CRLF
-00020D  1               
-00020D  1               ;        JSR CRLF
-00020D  1               ;        JSR CRLF
-00020D  1               ;        JSR CRLF
-00020D  1               ;        JSR CRLF
-00020D  1               
-00020D  1               ;        LDA #$00
-00020D  1               ;        STA TESTID
-00020D  1               ;        STA FINAL_RESULT
-00020D  1               
-00020D  1               ;;;;;;;;;;;; TESTS START HERE
-00020D  1               
-00020D  1               
-00020D  1  4C 4F 1C             JMP START
-00020D  1               
+000207  1  A9 FA                LDA #$FA
+000209  1  85 01                STA $01
+00020B  1               
+00020B  1  20 2F 1E              JSR CRLF
+00020E  1  20 2F 1E              JSR CRLF
+000211  1               
+000211  1  20 2F 1E             JSR CRLF
+000214  1  20 2F 1E             JSR CRLF
+000217  1  20 2F 1E             JSR CRLF
+00021A  1  20 2F 1E             JSR CRLF
+00021D  1               
+00021D  1               ;        LDA #$00
+00021D  1               ;        STA TESTID
+00021D  1               ;        STA FINAL_RESULT
+00021D  1               
+00021D  1               ;;;;;;;;;;;; TESTS START HERE
+00021D  1               
+00021D  1               
+00021D  1  4C 4F 1C             JMP START
+00021D  1               
